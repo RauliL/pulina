@@ -42,6 +42,7 @@ export const reducer = reducerWithInitialState(initialState)
         name: action.payload.channel,
         users: [],
         events: [],
+        hasUnreadMessages: false,
       };
       currentChannel = channel.name;
     }
@@ -158,6 +159,7 @@ export const reducer = reducerWithInitialState(initialState)
         ...state.channels,
         [channel.name]: {
           ...channel,
+          hasUnreadMessages: channel.name !== state.currentChannel,
           events: [
             ...channel.events,
             {
@@ -219,7 +221,26 @@ export const reducer = reducerWithInitialState(initialState)
       },
     };
   })
-  .caseWithAction(changeCurrentChannel, (state, action) => ({
-    ...state,
-    currentChannel: action.payload,
-  }));
+  .caseWithAction(changeCurrentChannel, (state, action) => {
+    const currentChannel = action.payload;
+    const channel = state.channels[currentChannel];
+
+    if (channel && channel.hasUnreadMessages) {
+      return {
+        ...state,
+        currentChannel,
+        channels: {
+          ...state.channels,
+          [currentChannel]: {
+            ...channel,
+            hasUnreadMessages: false,
+          },
+        },
+      };
+    }
+
+    return {
+      ...state,
+      currentChannel,
+    };
+  });

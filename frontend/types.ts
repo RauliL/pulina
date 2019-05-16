@@ -71,6 +71,8 @@ export interface Channel {
   users: string[];
   /** List of events that occurred on the channel. */
   events: ChannelEvent[];
+  /** Whether the channel has unread messages or not. */
+  hasUnreadMessages: boolean;
 }
 
 export interface PulinaState {

@@ -23,6 +23,7 @@ const ChannelList: React.SFC<Props> = (props) => (
         name={channel.name}
         onSelect={() => props.onSelectChannel(channel.name)}
         isActive={props.currentChannel === channel.name}
+        hasUnreadMessages={channel.hasUnreadMessages}
       />
     ))}
   </ul>
