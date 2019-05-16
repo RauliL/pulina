@@ -73,7 +73,7 @@ const getEventClassName = (event: ChannelEvent): string | undefined => {
 const ChannelEventLogItem: React.SFC<Props> = ({ event }) => (
   <Row>
     <Col lg="auto" className="pl-2 pr-2 text-secondary">
-      {format(event.timestamp, 'HH:MM:SS')}
+      {format(event.timestamp, 'HH:mm:ss')}
     </Col>
     <Col className={getEventClassName(event)}>
       {renderEvent(event)}
