@@ -1,4 +1,4 @@
-import { values } from 'lodash';
+import { sortBy, values } from 'lodash';
 import { connect } from 'react-redux';
 
 import { changeCurrentChannel } from '../action';
@@ -9,7 +9,7 @@ import ChannelList, {
 import { PulinaDispatch, PulinaState } from '../types';
 
 const mapStateToProps = (state: PulinaState): StateProps => ({
-  channels: values(state.channels),
+  channels: sortBy(values(state.channels), 'name'),
   currentChannel: state.currentChannel,
 });
 

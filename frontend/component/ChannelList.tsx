@@ -17,7 +17,7 @@ export type Props = StateProps & DispatchProps;
 
 const ChannelList: React.SFC<Props> = (props) => (
   <ul className="list-unstyled">
-    {props.channels.sort().map((channel) => (
+    {props.channels.map((channel) => (
       <ChannelListItem
         key={channel.name}
         name={channel.name}
