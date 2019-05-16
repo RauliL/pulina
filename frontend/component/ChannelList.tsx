@@ -16,7 +16,7 @@ export interface DispatchProps {
 export type Props = StateProps & DispatchProps;
 
 const ChannelList: React.SFC<Props> = (props) => (
-  <ul className="list-unstyled" style={{ overflowY: 'auto' }}>
+  <ul className="list-unstyled">
     {props.channels.sort().map((channel) => (
       <ChannelListItem
         key={channel.name}

@@ -23,14 +23,23 @@ export default class App extends React.Component<Props> {
           <Col
             lg={1}
             className="bg-dark p-0 border-right"
-            style={{ height: '100vh' }}
+            style={{
+              height: '100vh',
+              overflowY: 'auto',
+            }}
           >
             <ChannelList/>
           </Col>
           <Col lg={10} className="p-0" style={{ height: '100vh' }}>
             <MainDisplay onCommand={this.onCommand}/>
           </Col>
-          <Col lg={1} className="p-0 border-left" style={{ height: '100vh' }}>
+          <Col
+            lg={1}
+            className="p-0 border-left"
+            style={{
+              height: '100vh',
+              overflowY: 'auto',
+            }}>
             <ChannelUserList/>
           </Col>
         </Row>
