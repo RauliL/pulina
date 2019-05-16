@@ -1,0 +1,58 @@
+{
+  "name": "pulina",
+  "version": "0.1.0",
+  "description": "IRC like chat server implementation",
+  "license": "MIT",
+  "homepage": "https://github.com/RauliL/pulina",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:RauliL/pulina.git"
+  },
+  "bugs": {
+    "url": "https://github.com/RauliL/pulina/issues"
+  },
+  "keywords": [
+    "chat"
+  ],
+  "scripts": {
+    "build": "webpack-cli --mode=production",
+    "watch": "webpack-cli --mode=development --watch",
+    "start": "ts-node ./backend/index.ts",
+    "prepack": "yarn run build"
+  },
+  "dependencies": {
+    "@types/express": "^4.16.1",
+    "@types/socket.io": "^2.1.2",
+    "@types/uuid": "^3.4.4",
+    "express": "^4.16.4",
+    "socket.io": "^2.2.0",
+    "ts-node": "^8.1.0",
+    "typescript": "^3.4.5",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.129",
+    "@types/react": "^16.8.17",
+    "@types/react-dom": "^16.8.4",
+    "@types/react-redux": "^7.0.9",
+    "@types/reactstrap": "^8.0.1",
+    "bootstrap": "^4.3.1",
+    "css-loader": "^2.1.1",
+    "date-fns": "^1.30.1",
+    "lodash": "^4.17.11",
+    "node-sass": "^4.12.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.0.3",
+    "reactstrap": "^8.0.0",
+    "redux": "^4.0.1",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "ts-loader": "^6.0.0",
+    "typescript-fsa": "^3.0.0-beta-2",
+    "typescript-fsa-reducers": "^1.2.1",
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.3.2"
+  }
+}

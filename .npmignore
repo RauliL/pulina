@@ -1,0 +1,7 @@
+*.tgz
+/.editorconfig
+/frontend
+/node_modules
+/public/bundle.js.map
+/tsconfig.frontend.json
+/webpack.config.js

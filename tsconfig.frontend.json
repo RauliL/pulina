@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext",
+    "strict": true,
+    "esModuleInterop": true,
+    "jsx": "react",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true
+  },
+  "include": [
+    "frontend"
+  ],
+  "exclude": [
+    "backend"
+  ]
+}
