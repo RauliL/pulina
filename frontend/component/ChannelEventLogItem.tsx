@@ -75,7 +75,7 @@ const ChannelEventLogItem: React.SFC<Props> = ({ event }) => (
     <Col lg="auto" className="pl-2 pr-2 text-secondary">
       {format(event.timestamp, 'HH:mm:ss')}
     </Col>
-    <Col className={getEventClassName(event)}>
+    <Col className={`text-break ${getEventClassName(event)}`}>
       {renderEvent(event)}
     </Col>
   </Row>
