@@ -192,6 +192,9 @@ export const sendMessage = (connection: Connection,
     return;
   }
 
+  // Blatantly limit length of the message to 512 characters.
+  message = message.substring(0, 512);
+
   // TODO: Add some kind of flood prevention.
 
   // Announce the part to every user on the channel.
