@@ -1,5 +1,13 @@
 import * as React from 'react';
-import { Button, Form, FormGroup, Input, InputGroup, Label } from 'reactstrap';
+import {
+  Button,
+  Container,
+  Form,
+  FormGroup,
+  Input,
+  InputGroup,
+  Label,
+} from 'reactstrap';
 
 import { isValidNick } from '../../common/utils';
 
@@ -29,31 +37,30 @@ export default class NickForm extends React.Component<Props, State> {
     const { isValid } = this.state;
 
     return (
-      <Form
-        onSubmit={this.onSubmit}
-        className="jumbotron w-50 mt-4 ml-auto mr-auto"
-      >
-        <p>You need a nickname in order to join the chat.</p>
-        <FormGroup>
-          <Label for="nick">Nickname:</Label>
-          <InputGroup>
-            <Input
-              id="nick"
-              pattern="^[a-zA-Z0-9-_]{1,15}$"
-              maxLength={15}
-              onChange={this.onUpdateNick}
-              className={errorMessage || !isValid ? 'is-invalid' : ''}
-            />
-            {errorMessage && <div className="invalid-feedback">
-              {errorMessage}
-            </div>}
-            {!isValid && <div className="invalid-feedback">
-              Given nickname is invalid.
-            </div>}
-          </InputGroup>
-        </FormGroup>
-        <Button type="submit">Connect</Button>
-      </Form>
+      <Container>
+        <Form onSubmit={this.onSubmit} className="jumbotron mt-4 w-100">
+          <p>You need a nickname in order to join the chat.</p>
+          <FormGroup>
+            <Label for="nick">Nickname:</Label>
+            <InputGroup>
+              <Input
+                id="nick"
+                pattern="^[a-zA-Z0-9-_]{1,15}$"
+                maxLength={15}
+                onChange={this.onUpdateNick}
+                className={errorMessage || !isValid ? 'is-invalid' : ''}
+              />
+              {errorMessage && <div className="invalid-feedback">
+                {errorMessage}
+              </div>}
+              {!isValid && <div className="invalid-feedback">
+                Given nickname is invalid.
+              </div>}
+            </InputGroup>
+          </FormGroup>
+          <Button type="submit">Connect</Button>
+        </Form>
+      </Container>
     );
   }
 

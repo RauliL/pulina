@@ -22,7 +22,7 @@ export default class App extends React.Component<Props> {
         <Row>
           <Col
             lg={1}
-            className="bg-dark p-0 border-right"
+            className="bg-dark p-0 border-right d-none d-lg-block"
             style={{
               height: '100vh',
               overflowY: 'auto',
@@ -35,7 +35,7 @@ export default class App extends React.Component<Props> {
           </Col>
           <Col
             lg={1}
-            className="p-0 border-left"
+            className="p-0 border-left d-none d-lg-block"
             style={{
               height: '100vh',
               overflowY: 'auto',

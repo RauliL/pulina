@@ -40,15 +40,15 @@ export default class CommandInput extends React.Component<Props, State> {
     return (
       <Form onSubmit={this.onSubmit} className="border-top">
         <Container>
-          <Row className="pt-4 pb-4">
-            <Col lg={10}>
+          <Row>
+            <Col lg={11} className="mt-2 mb-2">
               <Input
                 id="command"
                 value={this.state.input}
                 onChange={this.onChangeInput}
               />
             </Col>
-            <Col lg={2}>
+            <Col lg={1} className="mt-2 mb-2">
               <Button type="submit" block={true}>
                 Send
               </Button>
