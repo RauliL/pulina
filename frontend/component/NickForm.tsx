@@ -29,7 +29,10 @@ export default class NickForm extends React.Component<Props, State> {
   public constructor(props: Props) {
     super(props);
 
-    this.state = { isValid: true };
+    this.state = {
+      nick: window.localStorage.getItem('nick') || undefined,
+      isValid: true,
+    };
   }
 
   public render() {
@@ -47,6 +50,7 @@ export default class NickForm extends React.Component<Props, State> {
                 id="nick"
                 pattern="^[a-zA-Z0-9-_]{1,15}$"
                 maxLength={15}
+                defaultValue={this.state.nick}
                 onChange={this.onUpdateNick}
                 className={errorMessage || !isValid ? 'is-invalid' : ''}
               />

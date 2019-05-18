@@ -21,9 +21,10 @@ import { PulinaStore } from './types';
 export const initializeSocket = (store: PulinaStore): Socket => {
   const socket = window.io();
 
-  socket.on(ServerEventType.WELCOME, ({ nick }) => (
-    store.dispatch(onNickRegistered(nick))
-  ));
+  socket.on(ServerEventType.WELCOME, ({ nick }) => {
+    store.dispatch(onNickRegistered(nick));
+    window.localStorage.setItem('nick', nick);
+  });
 
   socket.on(ServerEventType.JOIN, (event: ServerChannelEvent) => (
     store.dispatch(onJoinChannel(event))
