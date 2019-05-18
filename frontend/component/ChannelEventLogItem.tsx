@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import * as React from 'react';
 import { Col, Row } from 'reactstrap';
 
@@ -11,6 +10,8 @@ import {
   ChannelPartEvent,
   ChannelQuitEvent,
 } from '../types';
+
+import ChannelEventTimestamp from './ChannelEventTimestamp';
 
 export interface Props {
   event: ChannelEvent;
@@ -73,7 +74,7 @@ const getEventClassName = (event: ChannelEvent): string | undefined => {
 const ChannelEventLogItem: React.SFC<Props> = ({ event }) => (
   <Row>
     <Col lg="auto" className="pl-2 pr-2 text-secondary">
-      {format(event.timestamp, 'HH:mm:ss')}
+      <ChannelEventTimestamp timestamp={event.timestamp}/>
     </Col>
     <Col className={`text-break ${getEventClassName(event)}`}>
       {renderEvent(event)}
