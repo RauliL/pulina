@@ -15,6 +15,8 @@ export interface StateProps {
 
 export interface DispatchProps {
   onCommandError: (errorMessage: string) => void;
+  onToggleChannelList: () => void;
+  onToggleUserList: () => void;
 }
 
 export type Props =
@@ -51,6 +53,8 @@ const MainDisplay: React.SFC<Props> = (props) => {
       channel={props.currentChannel}
       onCommand={props.onCommand}
       onCommandError={props.onCommandError}
+      onToggleChannelList={props.onToggleChannelList}
+      onToggleUserList={props.onToggleUserList}
     />
   );
 };

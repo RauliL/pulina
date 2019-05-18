@@ -11,12 +11,16 @@ import {
   onNickRegistered,
   onPartChannel,
   onQuitChannel,
+  toggleChannelList,
+  toggleUserList,
 } from './action';
 import { ChannelEventType, PulinaState } from './types';
 import { getCurrentChannel } from './utils';
 
 const initialState: PulinaState = {
   channels: {},
+  channelListVisible: false,
+  userListVisible: false,
 };
 
 export const reducer = reducerWithInitialState(initialState)
@@ -229,6 +233,8 @@ export const reducer = reducerWithInitialState(initialState)
       return {
         ...state,
         currentChannel,
+        channelListVisible: false,
+        userListVisible: false,
         channels: {
           ...state.channels,
           [currentChannel]: {
@@ -242,5 +248,17 @@ export const reducer = reducerWithInitialState(initialState)
     return {
       ...state,
       currentChannel,
+      channelListVisible: false,
+      userListVisible: false,
     };
-  });
+  })
+  .case(toggleChannelList, (state) => ({
+    ...state,
+    channelListVisible: !state.channelListVisible,
+    userListVisible: false,
+  }))
+  .case(toggleUserList, (state) => ({
+    ...state,
+    channelListVisible: false,
+    userListVisible: !state.userListVisible,
+  }));

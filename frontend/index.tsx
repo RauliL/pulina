@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-import App from './component/App';
+import App from './container/App';
 import { initializeSocket } from './socket';
 import { initializeStore } from './store';
 

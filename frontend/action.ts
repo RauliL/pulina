@@ -23,3 +23,5 @@ export const onChannelUsers = actionCreator<ServerChannelUsersEvent>(
 export const onChannelError = actionCreator<string>('CHANNEL_ERROR');
 
 export const changeCurrentChannel = actionCreator<string>('CHANNEL_CHANGE');
+export const toggleChannelList = actionCreator('CHANNEL_LIST_TOGGLE');
+export const toggleUserList = actionCreator('USER_LIST_TOGGLE');

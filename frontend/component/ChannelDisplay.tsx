@@ -12,6 +12,8 @@ export interface Props {
   channel: Channel;
   onCommand: <T extends ClientCommand> (command: T) => void;
   onCommandError: (errorMessage: string) => void;
+  onToggleChannelList: () => void;
+  onToggleUserList: () => void;
 }
 
 const style = {
@@ -24,7 +26,11 @@ const style = {
 
 const ChannelDisplay: React.SFC<Props> = (props) => (
   <div style={style}>
-    <ChannelTitle channel={props.channel}/>
+    <ChannelTitle
+      channel={props.channel}
+      onToggleChannelList={props.onToggleChannelList}
+      onToggleUserList={props.onToggleUserList}
+    />
     <ChannelEventLog list={props.channel.events}/>
     <CommandInput
       currentChannel={props.channel}

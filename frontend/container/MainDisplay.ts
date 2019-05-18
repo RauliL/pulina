@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { onChannelError } from '../action';
+import { onChannelError, toggleChannelList, toggleUserList } from '../action';
 import MainDisplay, {
   DispatchProps,
   StateProps,
@@ -16,6 +16,14 @@ const mapStateToProps = (state: PulinaState): StateProps => ({
 const mapDispatchToProps = (dispatch: PulinaDispatch): DispatchProps => ({
   onCommandError(errorMessage: string) {
     dispatch(onChannelError(errorMessage));
+  },
+
+  onToggleChannelList() {
+    dispatch(toggleChannelList());
+  },
+
+  onToggleUserList() {
+    dispatch(toggleUserList());
   },
 });
 

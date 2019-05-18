@@ -1,18 +1,32 @@
 import { connect } from 'react-redux';
 
-import ChannelUserList, { StateProps } from '../component/ChannelUserList';
-import { PulinaState } from '../types';
+import { toggleUserList } from '../action';
+import ChannelUserList, {
+  DispatchProps,
+  StateProps,
+} from '../component/ChannelUserList';
+import { PulinaDispatch, PulinaState } from '../types';
 import { getCurrentChannel } from '../utils';
 
 const mapStateToProps = (state: PulinaState): StateProps => {
   const currentChannel = getCurrentChannel(state);
+  let channelName: string | undefined;
   let users: string[] | undefined;
 
   if (currentChannel) {
+    channelName = currentChannel.name;
     users = currentChannel.users.sort();
+  } else {
+    users = [];
   }
 
-  return { users };
+  return { channelName, users };
 };
 
-export default connect(mapStateToProps)(ChannelUserList);
+const mapDispatchToProps = (dispatch: PulinaDispatch): DispatchProps => ({
+  onToggleUserList() {
+    dispatch(toggleUserList());
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChannelUserList);

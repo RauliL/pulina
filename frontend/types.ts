@@ -84,6 +84,10 @@ export interface PulinaState {
   channels: { [name: string]: Channel };
   /** Name of the currently viewed channel. */
   currentChannel?: string;
+  /** Whether channel list should be visible or not. */
+  channelListVisible: boolean;
+  /** Whether user list should be visible or not. */
+  userListVisible: boolean;
 }
 
 export type PulinaAction = AnyAction;

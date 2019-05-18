@@ -1,7 +1,7 @@
 import { sortBy, values } from 'lodash';
 import { connect } from 'react-redux';
 
-import { changeCurrentChannel } from '../action';
+import { changeCurrentChannel, toggleChannelList } from '../action';
 import ChannelList, {
   DispatchProps,
   StateProps,
@@ -16,6 +16,10 @@ const mapStateToProps = (state: PulinaState): StateProps => ({
 const mapDispatchToProps = (dispatch: PulinaDispatch): DispatchProps => ({
   onSelectChannel(channel: string) {
     dispatch(changeCurrentChannel(channel));
+  },
+
+  onToggleChannelList() {
+    dispatch(toggleChannelList());
   },
 });
 
