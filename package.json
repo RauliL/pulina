@@ -1,6 +1,6 @@
 {
   "name": "pulina",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "IRC like chat server implementation",
   "license": "MIT",
   "homepage": "https://github.com/RauliL/pulina",

@@ -61,10 +61,8 @@ would make it more useful. Some things that I might add later would be:
 * Flood protection.
 * Improvements to the user interface in general, such as:
   * Keyboard shortcuts.
-  * Mobile device friendly UI.
   * Rich text support.
   * URL previews like in Slack.
-  * Notifications about new messages.
 
 Icon made by [Freepik] from [www.flaticon.com](https://www.flaticon.com).
 
