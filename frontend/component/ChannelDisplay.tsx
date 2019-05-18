@@ -2,11 +2,11 @@ import * as React from 'react';
 
 import { ClientCommand } from '../../common/command';
 
+import CommandInput from '../container/CommandInput';
 import { Channel } from '../types';
 
 import ChannelEventLog from './ChannelEventLog';
 import ChannelTitle from './ChannelTitle';
-import CommandInput from './CommandInput';
 
 export interface Props {
   channel: Channel;

@@ -1,14 +1,21 @@
-import { trim } from 'lodash';
+import { startsWith, trim } from 'lodash';
 import * as React from 'react';
 import { Button, Col, Container, Form, Input, Row } from 'reactstrap';
 
 import { ClientCommand } from '../../common/command';
-import { isBlank } from '../../common/utils';
+import { isBlank, isValidNick } from '../../common/utils';
 
 import { parseCommand } from '../command-parser';
 import { Channel } from '../types';
 
-export interface Props {
+export interface StateProps {
+  /** Nickname of the user itself. */
+  nick?: string;
+  /** List of nicknames on the current channel. */
+  users?: string[];
+}
+
+export interface OwnProps {
   /** Currently viewed channel. */
   currentChannel: Channel;
   /** Callback for sending a command. */
@@ -16,6 +23,8 @@ export interface Props {
   /** Callback for notifying about command errors. */
   onCommandError: (errorMessage: string) => void;
 }
+
+export type Props = StateProps & OwnProps;
 
 export interface State {
   input: string;
@@ -46,6 +55,7 @@ export default class CommandInput extends React.Component<Props, State> {
                 id="command"
                 value={this.state.input}
                 onChange={this.onChangeInput}
+                onKeyDown={this.onKeyDown}
               />
             </Col>
             <Col lg={1} className="mt-2 mb-2">
@@ -78,5 +88,23 @@ export default class CommandInput extends React.Component<Props, State> {
 
   private onChangeInput = (event: React.FormEvent<HTMLInputElement>) => {
     this.setState({ input: event.currentTarget.value });
+  };
+
+  private onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Tab') {
+      return;
+    }
+
+    event.preventDefault();
+
+    if (this.props.users && isValidNick(this.state.input)) {
+      const users = this.props.users.filter((nick) => (
+        nick !== this.props.nick && startsWith(nick, this.state.input)
+      ));
+
+      if (users.length > 0) {
+        this.setState({ input: `${users[0]}: ` });
+      }
+    }
   };
 }
