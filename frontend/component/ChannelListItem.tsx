@@ -5,6 +5,7 @@ export interface Props {
   name: string;
   isActive: boolean;
   hasUnreadMessages: boolean;
+  hasUnreadHighlight: boolean;
   onSelect: () => void;
 }
 
@@ -20,9 +21,14 @@ const getLinkClassName = (props: Props) => classNames(
 );
 
 const getChannelNameClassName = (props: Props) => classNames({
-  'font-weight-bold': props.hasUnreadMessages,
+  'font-weight-bold': props.hasUnreadMessages || props.hasUnreadHighlight,
   'text-body': props.isActive,
-  'text-white': !props.isActive && props.hasUnreadMessages,
+  'text-white': (
+    !props.isActive &&
+    props.hasUnreadMessages &&
+    !props.hasUnreadHighlight
+  ),
+  'text-warning': !props.isActive && props.hasUnreadHighlight,
   'text-secondary': !props.isActive && !props.hasUnreadMessages,
 });
 

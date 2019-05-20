@@ -47,6 +47,7 @@ export const reducer = reducerWithInitialState(initialState)
         users: [],
         events: [],
         hasUnreadMessages: false,
+        hasUnreadHighlight: false,
       };
       currentChannel = channel.name;
     }
@@ -157,6 +158,11 @@ export const reducer = reducerWithInitialState(initialState)
       return state;
     }
 
+    const isHighlight = Boolean(
+      state.nick &&
+      message.indexOf(state.nick) >= 0
+    );
+
     return {
       ...state,
       channels: {
@@ -164,6 +170,10 @@ export const reducer = reducerWithInitialState(initialState)
         [channel.name]: {
           ...channel,
           hasUnreadMessages: channel.name !== state.currentChannel,
+          hasUnreadHighlight: (
+            channel.name !== state.currentChannel &&
+            isHighlight
+          ),
           events: [
             ...channel.events,
             {
@@ -173,6 +183,7 @@ export const reducer = reducerWithInitialState(initialState)
               channel: channel.name,
               nick,
               message,
+              isHighlight,
             },
           ],
         },
@@ -229,7 +240,7 @@ export const reducer = reducerWithInitialState(initialState)
     const currentChannel = action.payload;
     const channel = state.channels[currentChannel];
 
-    if (channel && channel.hasUnreadMessages) {
+    if (channel && (channel.hasUnreadMessages || channel.hasUnreadHighlight)) {
       return {
         ...state,
         currentChannel,
@@ -240,6 +251,7 @@ export const reducer = reducerWithInitialState(initialState)
           [currentChannel]: {
             ...channel,
             hasUnreadMessages: false,
+            hasUnreadHighlight: false,
           },
         },
       };

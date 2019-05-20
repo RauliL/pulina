@@ -30,7 +30,15 @@ const renderQuitEvent = (event: ChannelQuitEvent) => (
 );
 
 const renderMessageEvent = (event: ChannelMessageEvent) => (
-  `<${event.nick}> ${event.message}`
+  <>
+    &lt;
+    <span className={event.isHighlight ? 'text-warning' : ''}>
+      {event.nick}
+    </span>
+    &gt;
+    &nbsp;
+    {event.message}
+  </>
 );
 
 const renderErrorEvent = (event: ChannelErrorEvent) => event.message;

@@ -55,6 +55,8 @@ export interface ChannelMessageEvent extends ChannelEvent {
   nick: string;
   /** The message that was sent. */
   message: string;
+  /** Whether the message should be highlighted or not. */
+  isHighlight: boolean;
 }
 
 export interface ChannelErrorEvent extends ChannelEvent {
@@ -73,6 +75,8 @@ export interface Channel {
   events: ChannelEvent[];
   /** Whether the channel has unread messages or not. */
   hasUnreadMessages: boolean;
+  /** Whether the channel has unread highlight or not. */
+  hasUnreadHighlight: boolean;
 }
 
 export interface PulinaState {
