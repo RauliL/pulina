@@ -15,12 +15,16 @@ const ChannelTitle: React.SFC<Props> = (props) => (
     <div className="float-right d-lg-none">
       <Button
         outline={true}
-        className="mr-2"
+        className="btn-toggle-channel-list mr-2"
         onClick={props.onToggleChannelList}
       >
         <i className="fas fa-hashtag"/>
       </Button>
-      <Button outline={true} onClick={props.onToggleUserList}>
+      <Button
+        outline={true}
+        className="btn-toggle-user-list"
+        onClick={props.onToggleUserList}
+      >
         <i className="fas fa-user"/>
       </Button>
     </div>

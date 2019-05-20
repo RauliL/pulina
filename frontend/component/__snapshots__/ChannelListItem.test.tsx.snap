@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ChannelListItem/> should render without throwing exception 1`] = `
+<li>
+  <a
+    className="p-2 d-block text-secondary text-decoration-none"
+    href="#"
+    onClick={[Function]}
+  >
+    #  
+    <span
+      className="text-secondary"
+    >
+      test-channel
+    </span>
+  </a>
+</li>
+`;
