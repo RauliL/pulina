@@ -161,6 +161,7 @@ export const reducer = reducerWithInitialState(initialState)
 
     const isHighlight = Boolean(
       state.nick &&
+      nick !== state.nick &&
       message.indexOf(state.nick) >= 0
     );
 
