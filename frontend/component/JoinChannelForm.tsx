@@ -25,7 +25,7 @@ export default class JoinChannelForm extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      channel: '#',
+      channel: window.localStorage.getItem('channel') || '#',
       isValid: true,
     };
   }
@@ -96,6 +96,7 @@ export default class JoinChannelForm extends React.Component<Props, State> {
       return;
     }
 
+    window.localStorage.setItem('channel', channel);
     this.props.onSubmit(channel);
   };
 }
