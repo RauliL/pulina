@@ -56,6 +56,7 @@ export default class CommandInput extends React.Component<Props, State> {
                 value={this.state.input}
                 onChange={this.onChangeInput}
                 onKeyDown={this.onKeyDown}
+                style={{ fontFamily: '"Fira Code", monospace' }}
               />
             </Col>
             <Col lg={1} className="mt-2 mb-2">
