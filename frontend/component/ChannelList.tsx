@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button } from 'reactstrap';
 
-import { Channel } from '../types';
+import { Channel } from '../types/channel';
 
 import ChannelListItem from './ChannelListItem';
 

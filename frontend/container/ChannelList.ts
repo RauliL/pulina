@@ -6,14 +6,14 @@ import ChannelList, {
   DispatchProps,
   StateProps,
 } from '../component/ChannelList';
-import { PulinaDispatch, PulinaState } from '../types';
+import { Dispatch, State } from '../types/store';
 
-const mapStateToProps = (state: PulinaState): StateProps => ({
+const mapStateToProps = (state: State): StateProps => ({
   channels: sortBy(values(state.channels), 'name'),
   currentChannel: state.currentChannel,
 });
 
-const mapDispatchToProps = (dispatch: PulinaDispatch): DispatchProps => ({
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   onSelectChannel(channel: string) {
     dispatch(changeCurrentChannel(channel));
   },

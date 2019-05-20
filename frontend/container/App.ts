@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 
 import App, { StateProps } from '../component/App';
-import { PulinaState } from '../types';
+import { State } from '../types/store';
 
-const mapStateToProps = (state: PulinaState): StateProps => ({
+const mapStateToProps = (state: State): StateProps => ({
   channelListVisible: state.channelListVisible,
   userListVisible: state.userListVisible,
 });

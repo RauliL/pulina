@@ -14,10 +14,11 @@ import {
   toggleChannelList,
   toggleUserList,
 } from './action';
-import { ChannelEventType, PulinaState } from './types';
+import { LogEntryType } from './types/log';
+import { State } from './types/store';
 import { getCurrentChannel } from './utils';
 
-const initialState: PulinaState = {
+const initialState: State = {
   channels: {},
   channelListVisible: false,
   userListVisible: false,
@@ -45,7 +46,7 @@ export const reducer = reducerWithInitialState(initialState)
       channel = {
         name: action.payload.channel,
         users: [],
-        events: [],
+        log: [],
         hasUnreadMessages: false,
         hasUnreadHighlight: false,
       };
@@ -60,12 +61,12 @@ export const reducer = reducerWithInitialState(initialState)
         [channel.name]: {
           ...channel,
           users: [...channel.users, nick],
-          events: [
-            ...channel.events,
+          log: [
+            ...channel.log,
             {
               id: uuid(),
               timestamp: Date.now(),
-              type: ChannelEventType.JOIN,
+              type: LogEntryType.JOIN,
               channel: channel.name,
               nick,
             },
@@ -107,12 +108,12 @@ export const reducer = reducerWithInitialState(initialState)
         [channel.name]: {
           ...channel,
           users: channel.users.filter((user) => user !== nick),
-          events: [
-            ...channel.events,
+          log: [
+            ...channel.log,
             {
               id: uuid(),
               timestamp: Date.now(),
-              type: ChannelEventType.PART,
+              type: LogEntryType.PART,
               channel: channel.name,
               nick,
             },
@@ -136,12 +137,12 @@ export const reducer = reducerWithInitialState(initialState)
         [channel.name]: {
           ...channel,
           users: channel.users.filter((user) => user !== nick),
-          events: [
-            ...channel.events,
+          log: [
+            ...channel.log,
             {
               id: uuid(),
               timestamp: Date.now(),
-              type: ChannelEventType.QUIT,
+              type: LogEntryType.QUIT,
               channel: channel.name,
               nick,
             },
@@ -174,12 +175,12 @@ export const reducer = reducerWithInitialState(initialState)
             channel.name !== state.currentChannel &&
             isHighlight
           ),
-          events: [
-            ...channel.events,
+          log: [
+            ...channel.log,
             {
               id: uuid(),
               timestamp: Date.now(),
-              type: ChannelEventType.MESSAGE,
+              type: LogEntryType.MESSAGE,
               channel: channel.name,
               nick,
               message,
@@ -222,12 +223,12 @@ export const reducer = reducerWithInitialState(initialState)
         ...state.channels,
         [channel.name]: {
           ...channel,
-          events: [
-            ...channel.events,
+          log: [
+            ...channel.log,
             {
               id: uuid(),
               timestamp: Date.now(),
-              type: ChannelEventType.ERROR,
+              type: LogEntryType.ERROR,
               channel: channel.name,
               message: action.payload,
             },

@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 
 import NickForm, { StateProps } from '../component/NickForm';
-import { PulinaState } from '../types';
+import { State } from '../types/store';
 
-const mapStateToProps = (state: PulinaState): StateProps => ({
+const mapStateToProps = (state: State): StateProps => ({
   errorMessage: state.nickError,
 });
 

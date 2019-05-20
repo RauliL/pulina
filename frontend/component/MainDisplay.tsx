@@ -3,7 +3,7 @@ import * as React from 'react';
 import { ClientCommand, ClientCommandType } from '../../common/command';
 
 import NickForm from '../container/NickForm';
-import { Channel } from '../types';
+import { Channel } from '../types/channel';
 
 import ChannelDisplay from './ChannelDisplay';
 import JoinChannelForm from './JoinChannelForm';

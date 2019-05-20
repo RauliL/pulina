@@ -7,7 +7,7 @@ import {
 } from '../common/command';
 import { isBlank, isValidChannelName } from '../common/utils';
 
-import { Channel } from './types';
+import { Channel } from './types/channel';
 
 const parseJoinCommand = (input: string): Promise<ClientChannelCommand> => (
   new Promise((resolve, reject) => {

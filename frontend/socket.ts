@@ -16,9 +16,9 @@ import {
   onQuitChannel,
   onPartChannel,
 } from './action';
-import { PulinaStore } from './types';
+import { Store } from './types/store';
 
-export const initializeSocket = (store: PulinaStore): Socket => {
+export const initializeSocket = (store: Store): Socket => {
   const socket = window.io();
 
   socket.on(ServerEventType.WELCOME, ({ nick }) => {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Navbar } from 'reactstrap';
 
-import { Channel } from '../types';
+import { Channel } from '../types/channel';
 
 export interface Props {
   channel: Channel;

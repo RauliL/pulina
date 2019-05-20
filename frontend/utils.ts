@@ -1,8 +1,9 @@
 import { defaultTo, isEmpty, values } from 'lodash';
 
-import { Channel, PulinaState } from './types';
+import { Channel } from './types/channel';
+import { State } from './types/store';
 
-export const getCurrentChannel = (state: PulinaState): Channel | undefined => {
+export const getCurrentChannel = (state: State): Channel | undefined => {
   const channels = values(state.channels).sort();
 
   if (isEmpty(channels)) {

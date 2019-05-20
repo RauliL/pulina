@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 
 import CommandInput, { StateProps } from '../component/CommandInput';
-import { PulinaState } from '../types';
+import { State } from '../types/store';
 import { getCurrentChannel } from '../utils';
 
-const mapStateToProps = (state: PulinaState): StateProps => {
+const mapStateToProps = (state: State): StateProps => {
   const currentChannel = getCurrentChannel(state);
   let users: string[] | undefined;
 

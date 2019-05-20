@@ -6,7 +6,7 @@ import { ClientCommand } from '../../common/command';
 import { isBlank, isValidNick } from '../../common/utils';
 
 import { parseCommand } from '../command-parser';
-import { Channel } from '../types';
+import { Channel } from '../types/channel';
 
 export interface StateProps {
   /** Nickname of the user itself. */

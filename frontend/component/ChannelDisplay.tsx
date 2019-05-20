@@ -3,10 +3,10 @@ import * as React from 'react';
 import { ClientCommand } from '../../common/command';
 
 import CommandInput from '../container/CommandInput';
-import { Channel } from '../types';
+import { Channel } from '../types/channel';
 
-import ChannelEventLog from './ChannelEventLog';
 import ChannelTitle from './ChannelTitle';
+import LogEntryList from './LogEntryList';
 
 export interface Props {
   channel: Channel;
@@ -31,7 +31,7 @@ const ChannelDisplay: React.SFC<Props> = (props) => (
       onToggleChannelList={props.onToggleChannelList}
       onToggleUserList={props.onToggleUserList}
     />
-    <ChannelEventLog list={props.channel.events}/>
+    <LogEntryList list={props.channel.log}/>
     <CommandInput
       currentChannel={props.channel}
       onCommand={props.onCommand}

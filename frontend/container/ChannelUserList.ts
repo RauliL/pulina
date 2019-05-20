@@ -5,10 +5,10 @@ import ChannelUserList, {
   DispatchProps,
   StateProps,
 } from '../component/ChannelUserList';
-import { PulinaDispatch, PulinaState } from '../types';
+import { Dispatch, State } from '../types/store';
 import { getCurrentChannel } from '../utils';
 
-const mapStateToProps = (state: PulinaState): StateProps => {
+const mapStateToProps = (state: State): StateProps => {
   const currentChannel = getCurrentChannel(state);
   let channelName: string | undefined;
   let users: string[] | undefined;
@@ -23,7 +23,7 @@ const mapStateToProps = (state: PulinaState): StateProps => {
   return { channelName, users };
 };
 
-const mapDispatchToProps = (dispatch: PulinaDispatch): DispatchProps => ({
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   onToggleUserList() {
     dispatch(toggleUserList());
   },

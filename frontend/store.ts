@@ -1,14 +1,9 @@
 import { createStore } from 'redux';
 
 import { reducer } from './reducer';
-import { PulinaAction, PulinaState, PulinaStore } from './types';
+import { Action, State, Store } from './types/store';
 
-export const initializeStore = (): PulinaStore => createStore<
-  PulinaState,
-  PulinaAction,
-  {},
-  {}
->(
+export const initializeStore = (): Store => createStore<State, Action, {}, {}>(
   reducer,
   process.env.NODE_ENV === 'development' &&
   window &&
