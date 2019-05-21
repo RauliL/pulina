@@ -18,7 +18,9 @@
     "build": "webpack-cli --mode=production",
     "watch": "webpack-cli --mode=development --watch",
     "start": "ts-node ./backend/index.ts",
-    "prepack": "yarn run build"
+    "prepack": "yarn run build",
+    "test": "jest",
+    "test:coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls"
   },
   "dependencies": {
     "@types/express": "^4.16.1",
@@ -32,15 +34,24 @@
   },
   "devDependencies": {
     "@types/classnames": "^2.2.7",
+    "@types/enzyme": "^3.9.2",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
+    "@types/jest": "^24.0.13",
     "@types/lodash": "^4.14.129",
     "@types/react": "^16.8.17",
     "@types/react-dom": "^16.8.4",
     "@types/react-redux": "^7.0.9",
     "@types/reactstrap": "^8.0.1",
+    "@types/redux-mock-store": "^1.0.1",
     "bootstrap": "^4.3.1",
     "classnames": "^2.2.6",
+    "coveralls": "^3.0.3",
     "css-loader": "^2.1.1",
     "date-fns": "^1.30.1",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.13.1",
+    "enzyme-to-json": "^3.3.5",
+    "jest": "^24.8.0",
     "lodash": "^4.17.11",
     "node-sass": "^4.12.0",
     "prop-types": "^15.7.2",
@@ -49,12 +60,20 @@
     "react-redux": "^7.0.3",
     "reactstrap": "^8.0.0",
     "redux": "^4.0.1",
+    "redux-mock-store": "^1.5.3",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
+    "ts-jest": "^24.0.2",
     "ts-loader": "^6.0.0",
     "typescript-fsa": "^3.0.0-beta-2",
     "typescript-fsa-reducers": "^1.2.1",
     "webpack": "^4.31.0",
     "webpack-cli": "^3.3.2"
+  },
+  "jest": {
+    "projects": [
+      "backend/jest.config.js",
+      "frontend/jest.config.js"
+    ]
   }
 }

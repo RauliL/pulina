@@ -1,5 +1,16 @@
 # Pulina
 
+[![travis][travis-image]][travis-url]
+[![coveralls][coveralls-image]][coveralls-url]
+[![npm][npm-image]][npm-url]
+
+[travis-image]: https://img.shields.io/travis/RauliL/pulina/master.svg
+[travis-url]: https://travis-ci.org/RauliL/pulina
+[coveralls-image]: https://coveralls.io/repos/github/RauliL/pulina/badge.svg
+[coveralls-url]: https://coveralls.io/github/RauliL/pulina
+[npm-image]: https://img.shields.io/npm/v/pulina.svg
+[npm-url]: https://npmjs.org/package/pulina
+
 Pulina is mininal IRC like chat implementation with a Web user interface. It
 requires no registration, users can just connect, choose a nickname and join
 chat rooms. Unlike in many other chat implementations, messages are not stored

@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ChannelTitle/> should render without throwing exception 1`] = `
+<Navbar
+  className="border-bottom"
+  expand={false}
+  tag="nav"
+>
+  <span
+    className="navbar-brand"
+  >
+    #test-channel
+  </span>
+  <div
+    className="float-right d-lg-none"
+  >
+    <Button
+      className="btn-toggle-channel-list mr-2"
+      color="secondary"
+      onClick={[Function]}
+      outline={true}
+      tag="button"
+    >
+      <i
+        className="fas fa-hashtag"
+      />
+    </Button>
+    <Button
+      className="btn-toggle-user-list"
+      color="secondary"
+      onClick={[Function]}
+      outline={true}
+      tag="button"
+    >
+      <i
+        className="fas fa-user"
+      />
+    </Button>
+  </div>
+</Navbar>
+`;
