@@ -1,10 +1,10 @@
-import { defaultTo, isEmpty, values } from 'lodash';
+import { defaultTo, isEmpty, sortBy, values } from 'lodash';
 
 import { Channel } from './types/channel';
 import { State } from './types/store';
 
 export const getCurrentChannel = (state: State): Channel | undefined => {
-  const channels = values(state.channels).sort();
+  const channels = sortBy(values(state.channels), 'name');
 
   if (isEmpty(channels)) {
     return;
