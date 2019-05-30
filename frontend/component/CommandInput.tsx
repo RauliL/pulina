@@ -31,17 +31,18 @@ export interface State {
 }
 
 export default class CommandInput extends React.Component<Props, State> {
+  private inputRef: React.RefObject<HTMLInputElement>;
+
   public constructor(props: Props) {
     super(props);
 
     this.state = { input: '' };
+    this.inputRef = React.createRef();
   }
 
   public componentDidMount() {
-    const input = document.getElementById('command');
-
-    if (input) {
-      input.focus();
+    if (this.inputRef.current) {
+      this.inputRef.current.focus();
     }
   }
 
@@ -52,11 +53,11 @@ export default class CommandInput extends React.Component<Props, State> {
           <Row>
             <Col lg={11} className="mt-2 mb-2">
               <Input
-                id="command"
                 value={this.state.input}
                 onChange={this.onChangeInput}
                 onKeyDown={this.onKeyDown}
                 style={{ fontFamily: '"Fira Code", monospace' }}
+                innerRef={this.inputRef}
               />
             </Col>
             <Col lg={1} className="mt-2 mb-2">

@@ -21,6 +21,8 @@ export interface State {
 }
 
 export default class JoinChannelForm extends React.Component<Props, State> {
+  private inputRef: React.RefObject<HTMLInputElement>;
+
   public constructor(props: Props) {
     super(props);
 
@@ -28,6 +30,8 @@ export default class JoinChannelForm extends React.Component<Props, State> {
       channel: window.localStorage.getItem('channel') || '#',
       isValid: true,
     };
+
+    this.inputRef = React.createRef();
   }
 
   public render() {
@@ -48,11 +52,11 @@ export default class JoinChannelForm extends React.Component<Props, State> {
             <Label for="channel">Name of the channel:</Label>
             <InputGroup>
               <Input
-                id="channel"
                 defaultValue={this.state.channel}
                 pattern="^#[a-zA-Z0-9-_]{1,150}$"
                 maxLength={151}
                 onChange={this.onUpdateChannel}
+                innerRef={this.inputRef}
               />
               {!isValid && <div className="invalid-feedback">
                 Given channel name is invalid.
@@ -66,10 +70,8 @@ export default class JoinChannelForm extends React.Component<Props, State> {
   }
 
   public componentDidMount() {
-    const input = document.getElementById('channel');
-
-    if (input) {
-      input.focus();
+    if (this.inputRef.current) {
+      this.inputRef.current.focus();
     }
   }
 

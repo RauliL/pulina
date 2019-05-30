@@ -26,6 +26,8 @@ export interface State {
 }
 
 export default class NickForm extends React.Component<Props, State> {
+  private inputRef: React.RefObject<HTMLInputElement>;
+
   public constructor(props: Props) {
     super(props);
 
@@ -33,6 +35,8 @@ export default class NickForm extends React.Component<Props, State> {
       nick: window.localStorage.getItem('nick') || undefined,
       isValid: true,
     };
+
+    this.inputRef = React.createRef();
   }
 
   public render() {
@@ -47,12 +51,12 @@ export default class NickForm extends React.Component<Props, State> {
             <Label for="nick">Nickname:</Label>
             <InputGroup>
               <Input
-                id="nick"
                 pattern="^[a-zA-Z0-9-_]{1,15}$"
                 maxLength={15}
                 defaultValue={this.state.nick}
                 onChange={this.onUpdateNick}
                 className={errorMessage || !isValid ? 'is-invalid' : ''}
+                innerRef={this.inputRef}
               />
               {errorMessage && <div className="invalid-feedback">
                 {errorMessage}
@@ -69,10 +73,8 @@ export default class NickForm extends React.Component<Props, State> {
   }
 
   public componentDidMount() {
-    const input = document.getElementById('nick');
-
-    if (input) {
-      input.focus();
+    if (this.inputRef.current) {
+      this.inputRef.current.focus();
     }
   }
 
