@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Container } from 'reactstrap';
 
 import { LogEntry } from '../types/log';
 
@@ -15,31 +14,48 @@ const style: React.CSSProperties = {
 };
 
 export default class LogEntryList extends React.Component<Props> {
-  public componentDidUpdate(prevProps: Props) {
-    // If the number of events in the log has changed since last update, scroll
-    // down the log so that the most recent one is always visible.
-    if (this.props.list.length !== prevProps.list.length) {
-      const container = document.getElementById('channel-log');
+  private containerRef: React.RefObject<HTMLDivElement>;
+
+  public constructor(props: Props) {
+    super(props);
+
+    this.containerRef = React.createRef();
+  }
+
+  public getSnapshotBeforeUpdate(prevProps: Props) {
+    if (prevProps.list.length < this.props.list.length) {
+      const container = this.containerRef.current;
 
       if (container) {
-        container.scroll({
-          top: container.scrollHeight,
-          behavior: 'smooth',
-        });
+        return container.scrollHeight - container.scrollTop;
+      }
+    }
+
+    return null;
+  }
+
+  public componentDidUpdate(prevProps: Props,
+                            state: {},
+                            snapshot: number | null) {
+    if (snapshot !== null) {
+      const container = this.containerRef.current;
+
+      if (container) {
+        container.scrollTop = container.scrollHeight - snapshot;
       }
     }
   }
 
   public render() {
     return (
-      <Container id="channel-log" fluid={true} style={style}>
+      <div className="container-fluid" style={style} ref={this.containerRef}>
         {this.props.list.map((entry) => (
           <LogEntryListItem
             key={entry.id}
             entry={entry}
           />
         ))}
-      </Container>
+      </div>
     );
   }
 }
