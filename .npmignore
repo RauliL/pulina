@@ -1,7 +1,12 @@
-*.tgz
+/.dockerignore
 /.editorconfig
-/frontend
-/node_modules
-/public/bundle.js.map
-/tsconfig.frontend.json
+/.github
+/.vscode
+/Dockerfile
+/eslint.config.js
+/src
+/tsconfig.*.json
+/vitest.workspace.ts
 /webpack.config.js
+*.log
+*.tgz

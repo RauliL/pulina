@@ -1,5 +1,5 @@
-*.tgz
+/dist
 /node_modules
-/package-lock.json
-/public/bundle.js
-/public/bundle.js.map
+/public/static/bundle.js*
+*.log
+*.tgz

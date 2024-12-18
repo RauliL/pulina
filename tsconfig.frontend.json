@@ -11,10 +11,11 @@
     "noImplicitAny": true
   },
   "include": [
-    "frontend"
+    "src/frontend"
   ],
   "exclude": [
-    "backend",
+    "src/backend",
+    "src/frontend/vitest.config.ts",
     "**/*.test.ts",
     "**/*.test.tsx"
   ]
