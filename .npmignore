@@ -3,7 +3,7 @@
 /.github
 /.vscode
 /Dockerfile
-/eslint.config.js
+/eslint.config.mjs
 /src
 /tsconfig.*.json
 /vitest.workspace.ts

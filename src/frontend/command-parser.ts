@@ -1,15 +1,14 @@
-import { trim } from "lodash";
-
 import {
-  ClientChannelCommand,
-  ClientCommand,
-  ClientCommandType,
-} from "../common/command";
-import { isBlank, isValidChannelName } from "../common/utils";
+  ClientEvent,
+  ClientEventType,
+  ClientParticipancyEvent,
+  ClientTopicEvent,
+  isBlank,
+  isValidChannel,
+} from "../common";
+import { Channel } from "./client";
 
-import { Channel } from "./types/channel";
-
-const parseJoinCommand = (input: string): Promise<ClientChannelCommand> =>
+const parseJoinCommand = (input: string): Promise<ClientParticipancyEvent> =>
   new Promise((resolve, reject) => {
     let channelName: string;
 
@@ -18,15 +17,15 @@ const parseJoinCommand = (input: string): Promise<ClientChannelCommand> =>
       return;
     }
 
-    channelName = trim(input);
+    channelName = input.trim();
 
-    if (!isValidChannelName(channelName)) {
+    if (!isValidChannel(channelName)) {
       reject("Invalid channel name.");
       return;
     }
 
     resolve({
-      type: ClientCommandType.JOIN,
+      type: ClientEventType.JOIN,
       channel: channelName,
     });
   });
@@ -34,24 +33,56 @@ const parseJoinCommand = (input: string): Promise<ClientChannelCommand> =>
 const parsePartCommand = (
   channel: Channel,
   input: string,
-): Promise<ClientChannelCommand> =>
+): Promise<ClientParticipancyEvent> =>
   new Promise((resolve, reject) => {
     let channelName: string;
 
     if (isBlank(input)) {
       channelName = channel.name;
     } else {
-      channelName = trim(input);
+      channelName = input.trim();
     }
 
-    if (!isValidChannelName(channelName)) {
+    if (!isValidChannel(channelName)) {
       reject("Invalid channel name.");
       return;
     }
 
     resolve({
-      type: ClientCommandType.PART,
+      type: ClientEventType.PART,
       channel: channelName,
+    });
+  });
+
+const parseTopicCommand = (
+  channel: Channel,
+  input: string,
+): Promise<ClientTopicEvent> =>
+  new Promise((resolve, reject) => {
+    let channelName: string;
+    const match = /^#\S*/.exec(input);
+
+    if (match) {
+      channelName = match[0];
+      input = input.substring(channelName.length).trim();
+    } else {
+      channelName = channel.name;
+    }
+
+    if (!isValidChannel(channelName)) {
+      reject("Invalid channel name.");
+      return;
+    }
+
+    if (isBlank(input)) {
+      reject("Missing topic.");
+      return;
+    }
+
+    resolve({
+      type: ClientEventType.TOPIC,
+      channel: channelName,
+      topic: input,
     });
   });
 
@@ -64,42 +95,38 @@ const parsePartCommand = (
 export const parseCommand = (
   channel: Channel,
   input: string,
-): Promise<ClientCommand> =>
-  new Promise((resolve, reject) => {
-    // Actual commands begin with a slash, so first look for that.
-    if (input[0] !== "/") {
-      // Assume it's a message being sent to the channel.
-      resolve({
-        type: ClientCommandType.MESSAGE,
-        channel: channel.name,
-        message: input,
-      } as ClientCommand);
-      return;
-    }
+): Promise<ClientEvent> => {
+  // Actual commands begin with a slash, so first look for that.
+  if (input[0] !== "/") {
+    // Assume it's a message being sent to the channel.
+    return Promise.resolve({
+      type: ClientEventType.MESSAGE,
+      message: input,
+      target: channel.name,
+    });
+  }
 
-    // Slash with a following whitespace and another slash is a method for
-    // sending messages beginning with a slash to the channel.
-    if (/^\/\s\/.+/.test(input)) {
-      resolve({
-        type: ClientCommandType.MESSAGE,
-        channel: channel.name,
-        message: input.substring(2),
-      } as ClientCommand);
-      return;
-    }
+  // Slash with a following whitespace and another slash is a method for
+  // sending messages beginning with a slash to the channel.
+  if (/^\/\s\/.+/.test(input)) {
+    return Promise.resolve({
+      type: ClientEventType.MESSAGE,
+      message: input.substring(2),
+      target: channel.name,
+    });
+  }
 
-    if (/^\/join(\s|$)/i.test(input)) {
-      parseJoinCommand(trim(input.substring(6))).then(resolve, reject);
-      return;
-    }
+  if (/^\/join(\s|$)/i.test(input)) {
+    return parseJoinCommand(input.substring(6).trim());
+  }
 
-    if (/^\/part(\s|$)/i.test(input)) {
-      parsePartCommand(channel, trim(input.substring(6))).then(
-        resolve,
-        reject,
-      );
-      return;
-    }
+  if (/^\/part(\s|$)/i.test(input)) {
+    return parsePartCommand(channel, input.substring(6).trim());
+  }
 
-    reject("Unknown command.");
-  });
+  if (/^\/topic(\s|$)/i.test(input)) {
+    return parseTopicCommand(channel, input.substring(7).trim());
+  }
+
+  return Promise.reject("Unknown command.");
+};

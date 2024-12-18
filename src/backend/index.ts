@@ -1,17 +1,19 @@
+import normalizePort from "@fvilers/normalize-port";
 import express from "express";
-import http from "http";
+import { createServer } from "node:http";
 import path from "path";
+import { Server } from "socket.io";
 
-import { registerConnection } from "./connection";
+import { registerClient } from "./client";
 
 const app = express();
-const server = new http.Server(app);
-const io = require("socket.io")(server);
-const port = parseInt(process.env.PORT || "3000", 10);
+const port = normalizePort(process.env.PORT || "3000");
+const server = createServer(app);
+const io = new Server(server);
 
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-io.on("connection", registerConnection);
+io.on("connection", registerClient);
 
 server.listen(port, () =>
   process.stdout.write(`Listening on port ${port}...\n`),

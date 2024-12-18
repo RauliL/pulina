@@ -1,4 +1,4 @@
-import { ClientCommandType } from "../common/command";
+import { ClientEventType } from "../common";
 import { describe, expect, it } from "vitest";
 
 import { parseCommand } from "./command-parser";
@@ -8,18 +8,18 @@ describe("parseCommand()", () => {
   it("should treat non-commands as messages", () =>
     parseCommand(mockChannel, "Test message").then((result) => {
       expect(result).toEqual({
-        type: ClientCommandType.MESSAGE,
-        channel: mockChannel.name,
+        type: ClientEventType.MESSAGE,
         message: "Test message",
+        target: mockChannel.name,
       });
     }));
 
   it("should treat input beginning with `/ /` as a message", () =>
     parseCommand(mockChannel, "/ /Test message").then((result) => {
       expect(result).toEqual({
-        type: ClientCommandType.MESSAGE,
-        channel: mockChannel.name,
+        type: ClientEventType.MESSAGE,
         message: "/Test message",
+        target: mockChannel.name,
       });
     }));
 
@@ -42,35 +42,62 @@ describe("parseCommand()", () => {
     it("should result in join command otherwise", () =>
       parseCommand(mockChannel, "/join #test").then((result) => {
         expect(result).toEqual({
-          type: ClientCommandType.JOIN,
+          type: ClientEventType.JOIN,
           channel: "#test",
         });
       }));
   });
 
   describe("/part", () => {
-    it("should default to current channel name", () => {
+    it("should default to current channel name", () =>
       parseCommand(mockChannel, "/part").then((result) => {
         expect(result).toEqual({
-          type: ClientCommandType.PART,
+          type: ClientEventType.PART,
           channel: mockChannel.name,
         });
-      });
-    });
+      }));
 
-    it("should allow overriding the channel name", () => {
+    it("should allow overriding the channel name", () =>
       parseCommand(mockChannel, "/part #test").then((result) => {
         expect(result).toEqual({
-          type: ClientCommandType.PART,
+          type: ClientEventType.PART,
           channel: "#test",
         });
-      });
-    });
+      }));
 
-    it("should reject invalid channel names", () => {
+    it("should reject invalid channel names", () =>
       expect(parseCommand(mockChannel, "/part fail")).rejects.toBe(
         "Invalid channel name.",
-      );
-    });
+      ));
+  });
+
+  describe("/topic", () => {
+    it("should default to current channel name", () =>
+      parseCommand(mockChannel, "/topic test").then((result) =>
+        expect(result).toEqual({
+          type: ClientEventType.TOPIC,
+          channel: mockChannel.name,
+          topic: "test",
+        }),
+      ));
+
+    it("should allow overriding the channel name", () =>
+      parseCommand(mockChannel, "/topic #test test").then((result) => {
+        expect(result).toEqual({
+          type: ClientEventType.TOPIC,
+          channel: "#test",
+          topic: "test",
+        });
+      }));
+
+    it("should reject invalid channel names", () =>
+      expect(parseCommand(mockChannel, "/topic #^ test")).rejects.toBe(
+        "Invalid channel name.",
+      ));
+
+    it("should reject empty topic", () =>
+      expect(parseCommand(mockChannel, "/topic")).rejects.toBe(
+        "Missing topic.",
+      ));
   });
 });

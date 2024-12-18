@@ -1,19 +1,22 @@
-import React from "react";
+import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 
-import App from "./container/App";
-import { initializeSocket } from "./socket";
-import { initializeStore } from "./store";
+import { App } from "./app";
+import { ClientContext } from "./context";
+import { initializeClient } from "./client";
+import { setupStore } from "./store";
 
-import "../../node_modules/bootstrap/scss/bootstrap.scss";
-
-const store = initializeStore();
-const socket = initializeSocket(store);
 const root = createRoot(document.getElementById("root")!);
+const store = setupStore();
+const client = initializeClient(store);
 
 root.render(
-  <Provider store={store}>
-    <App socket={socket} />
-  </Provider>,
+  <StrictMode>
+    <Provider store={store}>
+      <ClientContext.Provider value={client}>
+        <App />
+      </ClientContext.Provider>
+    </Provider>
+  </StrictMode>,
 );
