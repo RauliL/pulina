@@ -5,35 +5,30 @@ import {
   ClientEventType,
   ServerEvent,
   ServerEventType,
+  ServerMessageEvent,
   isBlank,
   isValidChannel,
   isValidNick,
 } from "../common";
 import { Channel } from "./channel";
 
+export type Client = {
+  id: string;
+  getNick: () => string;
+  isRegistered: () => boolean;
+  join: (room: string) => void;
+  leave: (room: string) => void;
+  send: (event: ServerEvent) => void;
+  sendChannelEvent: (channel: string, event: ServerEvent) => void;
+  sendError: (message: string) => void;
+};
+
 // Maps nicknames to socket connections.
-const mapping = new Map<string, Socket>();
+const mapping = new Map<string, Client>();
 
-export const sendEvent = (socket: Socket, event: ServerEvent) => {
-  socket.emit(event.type, event);
-};
-
-export const sendChannelEvent = (
-  socket: Socket,
-  channel: string,
-  event: ServerEvent,
-) => {
-  socket.to(channel).emit(event.type, event);
-  socket.emit(event.type, event);
-};
-
-export const sendError = (socket: Socket, message: string) => {
-  sendEvent(socket, { type: ServerEventType.ERROR, message });
-};
-
-const checkNick = (socket: Socket): boolean => {
-  if (!socket.handshake.auth.nick) {
-    sendError(socket, "You haven't registered a nickname yet.");
+const requireNick = (client: Client): boolean => {
+  if (!client.isRegistered()) {
+    client.sendError("You haven't registered a nickname yet.");
 
     return false;
   }
@@ -41,9 +36,9 @@ const checkNick = (socket: Socket): boolean => {
   return true;
 };
 
-const checkValidChannel = (socket: Socket, channel: string): boolean => {
+const requireValidChannel = (client: Client, channel: string): boolean => {
   if (!isValidChannel(channel)) {
-    sendError(socket, "Not a valid name for a channel.");
+    client.sendError("Not a valid name for a channel.");
 
     return false;
   }
@@ -51,9 +46,9 @@ const checkValidChannel = (socket: Socket, channel: string): boolean => {
   return true;
 };
 
-const checkValidNick = (socket: Socket, nick: string): boolean => {
+const requireValidNick = (client: Client, nick: string): boolean => {
   if (!isValidNick(nick)) {
-    sendError(socket, "Illegal nickname.");
+    client.sendError("Illegal nickname.");
 
     return false;
   }
@@ -62,19 +57,52 @@ const checkValidNick = (socket: Socket, nick: string): boolean => {
 };
 
 export const registerClient = (socket: Socket) => {
+  const client: Client = {
+    id: socket.id,
+
+    getNick() {
+      return socket.handshake.auth.nick;
+    },
+
+    isRegistered() {
+      return typeof socket.handshake.auth.nick === "string";
+    },
+
+    join(room: string) {
+      socket.join(room);
+    },
+
+    leave(room: string) {
+      socket.leave(room);
+    },
+
+    send(event: ServerEvent) {
+      socket.emit(event.type, event);
+    },
+
+    sendChannelEvent(channel: string, event: ServerEvent) {
+      socket.to(channel).emit(event.type, event);
+      socket.emit(event.type, event);
+    },
+
+    sendError(message: string) {
+      this.send({ type: ServerEventType.ERROR, message });
+    },
+  };
+
   process.stdout.write(`Client "${socket.id}" has connected.\n`);
 
   socket.once("disconnecting", () => {
     process.stdout.write(`Client "${socket.id}" has disconnected.\n`);
 
-    if (!socket.handshake.auth.nick) {
+    if (!client.isRegistered()) {
       return;
     }
 
     // Announce to all channels that the user has left.
     socket.rooms.forEach((channel) => {
       if (isValidChannel(channel)) {
-        Channel.part(socket, channel);
+        Channel.part(client, channel);
       }
     });
 
@@ -83,57 +111,50 @@ export const registerClient = (socket: Socket) => {
   });
 
   socket.on(ClientEventType.HELLO, ({ nick }) => {
-    onHello(socket, nick);
+    if (!requireValidNick(client, nick)) {
+      return;
+    }
+
+    if (client.isRegistered()) {
+      client.sendError("You already have a nickname.");
+      return;
+    }
+
+    if (mapping.has(nick)) {
+      client.sendError("That nickname has already been taken.");
+      return;
+    }
+
+    socket.handshake.auth.nick = nick;
+    mapping.set(nick, client);
+    client.send({ type: ServerEventType.WELCOME, nick });
   });
 
   socket.on(ClientEventType.JOIN, ({ channel }) => {
-    if (checkNick(socket) && checkValidChannel(socket, channel)) {
-      Channel.join(socket, channel);
+    if (requireNick(client) && requireValidChannel(client, channel)) {
+      Channel.join(client, channel);
     }
   });
 
   socket.on(ClientEventType.MESSAGE, ({ message, target }) => {
-    onMessage(socket, target, message);
+    onMessage(client, target, message);
   });
 
   socket.on(ClientEventType.PART, ({ channel }) => {
-    if (checkNick(socket) && checkValidChannel(socket, channel)) {
-      Channel.part(socket, channel);
+    if (requireNick(client) && requireValidChannel(client, channel)) {
+      Channel.part(client, channel);
     }
   });
 
   socket.on(ClientEventType.TOPIC, ({ channel, topic }) => {
-    if (checkNick(socket) && checkValidChannel(socket, channel)) {
-      Channel.setTopic(socket, channel, topic);
+    if (requireNick(client) && requireValidChannel(client, channel)) {
+      Channel.setTopic(client, channel, topic);
     }
   });
 };
 
-const onHello = (socket: Socket, nick: string) => {
-  if (!checkValidNick(socket, nick)) {
-    return;
-  }
-
-  if (socket.handshake.auth.nick) {
-    sendError(socket, "You already have a nickname.");
-    return;
-  }
-
-  if (mapping.has(nick)) {
-    sendError(socket, "That nickname has already been taken.");
-    return;
-  }
-
-  socket.handshake.auth.nick = nick;
-  mapping.set(nick, socket);
-  sendEvent(socket, {
-    type: ServerEventType.WELCOME,
-    nick,
-  });
-};
-
-const onMessage = (socket: Socket, target: string, message: string) => {
-  if (!checkNick(socket) || isBlank(message)) {
+const onMessage = (client: Client, target: string, message: string) => {
+  if (!requireNick(client) || isBlank(message)) {
     return;
   }
 
@@ -141,20 +162,35 @@ const onMessage = (socket: Socket, target: string, message: string) => {
   // TODO: Limit message length.
 
   if (isValidChannel(target)) {
-    sendChannelEvent(socket, target, {
+    client.sendChannelEvent(target, {
       type: ServerEventType.MESSAGE,
       id: uuid(),
       message,
-      source: socket.handshake.auth.nick,
+      source: client.getNick(),
       target,
     });
     return;
   }
 
   if (isValidNick(target)) {
-    // TODO: Implement private messages.
+    const targetClient = mapping.get(target);
+
+    if (targetClient) {
+      const event: ServerMessageEvent = {
+        type: ServerEventType.MESSAGE,
+        id: uuid(),
+        message,
+        source: client.getNick(),
+        target,
+      };
+
+      client.send(event);
+      targetClient.send(event);
+      return;
+    }
+    client.sendError("Unrecognized user.");
     return;
   }
 
-  sendError(socket, "Not a valid name for a channel or a user.");
+  client.sendError("Not a valid name for a channel or a user.");
 };

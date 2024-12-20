@@ -35,7 +35,16 @@ export const clientSlice = createSlice({
         name: channel,
         hasUnreadHighlights: false,
         hasUnreadMessages: false,
-        log: [],
+        log: topic
+          ? [
+              {
+                id: uuid(),
+                type: LogEntryType.INFO,
+                timestamp: Date.now(),
+                text: `Topic of this channel is: ${topic}`,
+              },
+            ]
+          : [],
         topic: topic,
         users: users,
       };
