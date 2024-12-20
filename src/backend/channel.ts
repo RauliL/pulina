@@ -1,7 +1,5 @@
-import { Socket } from "socket.io";
-
-import { sendChannelEvent, sendError, sendEvent } from "./client";
 import { ServerChannelInfoEvent, ServerEventType } from "../common";
+import { Client } from "./client";
 
 export type ChannelUser = {
   id: string;
@@ -15,55 +13,48 @@ export class Channel {
   public topic: string | null;
   public readonly users: Map<string, ChannelUser>;
 
-  static join(socket: Socket, name: string) {
+  static join(client: Client, name: string) {
+    const nick = client.getNick();
     let channel = this.mapping.get(name);
+    let isOperator = false;
 
     if (channel) {
-      if (channel.users.has(socket.handshake.auth.nick)) {
+      if (channel.users.has(nick)) {
+        client.sendError("You have already joined that channel.");
         return;
       }
 
       // TODO: Check for bans and password.
-
-      channel.users.set(socket.handshake.auth.nick, {
-        id: socket.id,
-        isOperator: false,
-      });
     } else {
       channel = new Channel(name);
-      channel.users.set(socket.handshake.auth.nick, {
-        id: socket.id,
-        isOperator: true,
-      });
       this.mapping.set(name, channel);
+      isOperator = true;
     }
 
-    socket.join(name);
-    sendEvent(socket, channel.channelInfoEvent);
-    sendChannelEvent(socket, name, {
+    channel.users.set(nick, { id: client.id, isOperator });
+
+    client.join(name);
+    client.send(channel.channelInfoEvent);
+    client.sendChannelEvent(name, {
       type: ServerEventType.JOIN,
       channel: name,
-      user: socket.handshake.auth.nick,
+      user: nick,
     });
   }
 
-  static part(socket: Socket, name: string) {
+  static part(client: Client, name: string) {
     const channel = this.mapping.get(name);
+    const nick = client.getNick();
 
-    if (!channel || !channel.users.has(socket.handshake.auth.nick)) {
+    if (!channel || !channel.users.has(nick)) {
       return;
     }
 
-    if (!channel.isOperator(socket)) {
-      sendError(socket, "You are not operator on this channel.");
-      return;
-    }
-
-    channel.users.delete(socket.handshake.auth.nick);
-    sendChannelEvent(socket, name, {
+    channel.users.delete(nick);
+    client.sendChannelEvent(name, {
       type: ServerEventType.PART,
       channel: name,
-      user: socket.handshake.auth.nick,
+      user: nick,
     });
 
     // If the user was the only user in the channel, delete the channel.
@@ -72,22 +63,28 @@ export class Channel {
     }
   }
 
-  static setTopic(socket: Socket, name: string, topic: string) {
+  static setTopic(client: Client, name: string, topic: string) {
     const channel = this.mapping.get(name);
+    const nick = client.getNick();
 
-    if (!channel || !channel.users.has(socket.handshake.auth.nick)) {
+    if (!channel || !channel.users.has(nick)) {
       console.log("Received unknown shit.");
+      return;
+    }
+
+    if (!channel.isOperator(nick)) {
+      client.sendError("You are not operator on this channel.");
       return;
     }
 
     // TODO: Limit topic size.
 
     channel.topic = topic;
-    sendChannelEvent(socket, name, {
+    client.sendChannelEvent(name, {
       type: ServerEventType.TOPIC,
       channel: name,
       topic,
-      user: socket.handshake.auth.nick,
+      user: nick,
     });
   }
 
@@ -112,8 +109,8 @@ export class Channel {
     };
   }
 
-  isOperator(socket: Socket): boolean {
-    return this.users.get(socket.handshake.auth.nick)?.isOperator ?? false;
+  isOperator(nick: string): boolean {
+    return this.users.get(nick)?.isOperator ?? false;
   }
 
   toString(): string {
