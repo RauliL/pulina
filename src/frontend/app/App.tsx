@@ -5,7 +5,7 @@ import { Col, Container, Row } from "reactstrap";
 
 import { RootState, UIState } from "../store";
 import { useCurrentChannel, useIsConnected } from "../hooks";
-import { ChannelList, UserList } from "./components";
+import { ChannelList } from "./components";
 import { ChatView, ConnectView, JoinChannelView } from "./view";
 
 const getLeftColumnClassName = (state: UIState) =>
@@ -28,20 +28,11 @@ const getMiddleColumnClassName = (state: UIState) =>
     "d-lg-block",
   );
 
-const getRightColumnClassName = (state: UIState) =>
-  classNames(
-    "p-0",
-    "border-left",
-    {
-      "d-none": !state.showUserList,
-    },
-    "d-lg-block",
-  );
-
 const App: FunctionComponent = () => {
   const state = useSelector<RootState, UIState>((state) => state.ui);
   const isConnected = useIsConnected();
   const currentChannel = useCurrentChannel();
+  const middleColumnClassName = getMiddleColumnClassName(state);
 
   return (
     <Container fluid>
@@ -57,31 +48,13 @@ const App: FunctionComponent = () => {
         >
           <ChannelList />
         </Col>
-        <Col
-          lg={10}
-          md={12}
-          className={getMiddleColumnClassName(state)}
-          style={{ height: "100vh" }}
-        >
-          {!isConnected ? (
-            <ConnectView />
-          ) : currentChannel ? (
-            <ChatView />
-          ) : (
-            <JoinChannelView />
-          )}
-        </Col>
-        <Col
-          lg={1}
-          md={12}
-          className={getRightColumnClassName(state)}
-          style={{
-            height: "100vh",
-            overflowY: "auto",
-          }}
-        >
-          <UserList />
-        </Col>
+        {!isConnected ? (
+          <ConnectView className={middleColumnClassName} />
+        ) : currentChannel ? (
+          <ChatView className={middleColumnClassName} />
+        ) : (
+          <JoinChannelView className={middleColumnClassName} />
+        )}
       </Row>
     </Container>
   );

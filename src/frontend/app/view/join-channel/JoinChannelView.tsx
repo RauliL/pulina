@@ -8,6 +8,7 @@ import React, {
   useState,
 } from "react";
 import {
+  Col,
   Button,
   Container,
   Form,
@@ -24,7 +25,13 @@ import {
 } from "../../../../common";
 import { useClient } from "../../../hooks";
 
-const JoinChannelView: FunctionComponent = () => {
+export type JoinChannelViewProps = {
+  className: string;
+};
+
+const JoinChannelView: FunctionComponent<JoinChannelViewProps> = ({
+  className,
+}) => {
   const client = useClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [channel, setChannel] = useState<string>(
@@ -59,39 +66,41 @@ const JoinChannelView: FunctionComponent = () => {
   }, []);
 
   return (
-    <Container>
-      <Form onSubmit={handleSubmit} className="jumbotron mt-4 w-100">
-        <p>
-          You haven't joined any channels yet. Give a name of a channel you
-          wish to join.
-        </p>
-        <p>
-          Hint: Try{" "}
-          <a href="#" onClick={handleGeneralClick}>
-            #general
-          </a>{" "}
-          if you are not sure which channel to join.
-        </p>
-        <FormGroup>
-          <Label for="channel">Name of the channel:</Label>
-          <InputGroup>
-            <Input
-              defaultValue={channel}
-              pattern={VALID_CHANNEL_NAME_PATTERN.source}
-              maxLength={151}
-              onChange={handleChannelUpdate}
-              innerRef={inputRef}
-            />
-            {!isValid && (
-              <div className="invalid-feedback">
-                Given channel name is invalid.
-              </div>
-            )}
-          </InputGroup>
-        </FormGroup>
-        <Button type="submit">Join channel</Button>
-      </Form>
-    </Container>
+    <Col lg={10} md={12} className={className}>
+      <Container>
+        <Form onSubmit={handleSubmit} className="jumbotron mt-4 w-100">
+          <p>
+            You haven't joined any channels yet. Give a name of a channel you
+            wish to join.
+          </p>
+          <p>
+            Hint: Try{" "}
+            <a href="#" onClick={handleGeneralClick}>
+              #general
+            </a>{" "}
+            if you are not sure which channel to join.
+          </p>
+          <FormGroup>
+            <Label for="channel">Name of the channel:</Label>
+            <InputGroup>
+              <Input
+                defaultValue={channel}
+                pattern={VALID_CHANNEL_NAME_PATTERN.source}
+                maxLength={151}
+                onChange={handleChannelUpdate}
+                innerRef={inputRef}
+              />
+              {!isValid && (
+                <div className="invalid-feedback">
+                  Given channel name is invalid.
+                </div>
+              )}
+            </InputGroup>
+          </FormGroup>
+          <Button type="submit">Join channel</Button>
+        </Form>
+      </Container>
+    </Col>
   );
 };
 

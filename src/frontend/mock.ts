@@ -1,7 +1,13 @@
 import { noop } from "lodash";
 
-import { Channel, Client } from "./client";
+import { Channel, ChannelUser, Client } from "./client";
 import { ClientState, RootState, UIState } from "./store";
+import { ClientEvent } from "../common";
+
+export const mockChannelUser: Readonly<ChannelUser> = {
+  isOperator: true,
+  nick: "test-user",
+};
 
 export const mockChannel: Readonly<Channel> = {
   name: "#test-channel",
@@ -9,11 +15,28 @@ export const mockChannel: Readonly<Channel> = {
   hasUnreadMessages: false,
   log: [],
   topic: null,
-  users: [],
+  users: [mockChannelUser],
 };
 
-export const mockClient: Readonly<Client> = {
-  send: noop,
+export type MockClient = Client & {
+  events: ClientEvent[];
+  reset: () => void;
+};
+
+export const mockClient = (): MockClient => {
+  const events: ClientEvent[] = [];
+
+  return {
+    events,
+
+    reset() {
+      events.length = 0;
+    },
+
+    send(event) {
+      events.push(event);
+    },
+  };
 };
 
 export const mockClientState: Readonly<ClientState> = {

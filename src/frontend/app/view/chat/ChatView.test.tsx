@@ -17,9 +17,9 @@ import ChatView from "./ChatView";
 describe("<ChatView/>", () => {
   const renderComponent = (store: AppStore) =>
     render(
-      <ClientContext.Provider value={mockClient}>
+      <ClientContext.Provider value={mockClient()}>
         <Provider store={store}>
-          <ChatView />
+          <ChatView className="" />
         </Provider>
       </ClientContext.Provider>,
     );

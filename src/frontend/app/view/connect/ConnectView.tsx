@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import {
   Button,
+  Col,
   Container,
   Form,
   FormGroup,
@@ -22,7 +23,11 @@ import {
 } from "../../../../common";
 import { useClient } from "../../../hooks";
 
-const ConnectView: FunctionComponent = () => {
+export type ConnectViewProps = {
+  className: string;
+};
+
+const ConnectView: FunctionComponent<ConnectViewProps> = ({ className }) => {
   const client = useClient();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [nick, setNick] = useState<string>(
@@ -52,31 +57,33 @@ const ConnectView: FunctionComponent = () => {
   }, []);
 
   return (
-    <Container>
-      <Form onSubmit={handleSubmit} className="jumbotron mt-4 w-100">
-        <p>You need a nickname in order to join the chat.</p>
-        <FormGroup>
-          <Label for="nick">Nickname:</Label>
-          <InputGroup>
-            <Input
-              pattern={VALID_NICK_PATTERN.source}
-              maxLength={15}
-              defaultValue={nick ?? ""}
-              onChange={handleNickUpdate}
-              className={error || isValid === false ? "is-invalid" : ""}
-              innerRef={inputRef}
-            />
-            {error && <div className="invalid-feedback">{error}</div>}
-            {!isValid && (
-              <div className="invalid-feedback">
-                Given nickname is invalid.
-              </div>
-            )}
-          </InputGroup>
-        </FormGroup>
-        <Button type="submit">Connect</Button>
-      </Form>
-    </Container>
+    <Col lg={10} md={12} className={className}>
+      <Container>
+        <Form onSubmit={handleSubmit} className="jumbotron mt-4 w-100">
+          <p>You need a nickname in order to join the chat.</p>
+          <FormGroup>
+            <Label for="nick">Nickname:</Label>
+            <InputGroup>
+              <Input
+                pattern={VALID_NICK_PATTERN.source}
+                maxLength={15}
+                defaultValue={nick ?? ""}
+                onChange={handleNickUpdate}
+                className={error || isValid === false ? "is-invalid" : ""}
+                innerRef={inputRef}
+              />
+              {error && <div className="invalid-feedback">{error}</div>}
+              {!isValid && (
+                <div className="invalid-feedback">
+                  Given nickname is invalid.
+                </div>
+              )}
+            </InputGroup>
+          </FormGroup>
+          <Button type="submit">Connect</Button>
+        </Form>
+      </Container>
+    </Col>
   );
 };
 

@@ -1,21 +1,21 @@
 import classNames from "classnames";
 import React, { FunctionComponent } from "react";
 
-export type Props = {
-  name: string;
-  isActive: boolean;
-  hasUnreadMessages: boolean;
+export type ChannelListItemProps = {
   hasUnreadHighlights: boolean;
+  hasUnreadMessages: boolean;
+  isActive: boolean;
+  name: string;
   onSelect: () => void;
 };
 
-const getLinkClassName = (props: Props) =>
+const getLinkClassName = (props: ChannelListItemProps) =>
   classNames("p-2", "d-block", "text-secondary", "text-decoration-none", {
     "bg-white": props.isActive,
     "text-body": props.isActive,
   });
 
-const getChannelNameClassName = (props: Props) =>
+const getChannelNameClassName = (props: ChannelListItemProps) =>
   classNames({
     "font-weight-bold": props.hasUnreadMessages || props.hasUnreadHighlights,
     "text-body": props.isActive,
@@ -25,8 +25,8 @@ const getChannelNameClassName = (props: Props) =>
     "text-secondary": !props.isActive && !props.hasUnreadMessages,
   });
 
-const ChannelListItem: FunctionComponent<Props> = (props) => (
-  <li>
+const ChannelListItem: FunctionComponent<ChannelListItemProps> = (props) => (
+  <li data-testid="ChannelListItem">
     <a
       href="#"
       className={getLinkClassName(props)}

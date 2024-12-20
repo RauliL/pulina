@@ -25,7 +25,11 @@ const ChannelList: FunctionComponent = () => {
       <li className="d-lg-none navbar bg-white text-body border-bottom">
         <span className="navbar-brand">Channels</span>
         <div className="float-right">
-          <Button outline onClick={handleToggleClick}>
+          <Button
+            outline
+            onClick={handleToggleClick}
+            data-testid="ToggleChannelListButton"
+          >
             <i className="fas fa-times" />
           </Button>
         </div>
