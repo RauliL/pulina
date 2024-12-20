@@ -84,10 +84,6 @@ module.exports = [
             configFile: path.resolve(__dirname, "tsconfig.frontend.json"),
           },
         },
-        {
-          test: /\.scss$/,
-          use: ["style-loader", "css-loader", "sass-loader"],
-        },
       ],
     },
   },

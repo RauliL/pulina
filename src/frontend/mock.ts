@@ -1,16 +1,31 @@
-import { Channel } from "./types/channel";
-import { State } from "./types/store";
+import { noop } from "lodash";
+
+import { Channel, Client } from "./client";
+import { ClientState, RootState, UIState } from "./store";
 
 export const mockChannel: Readonly<Channel> = {
   name: "#test-channel",
-  users: [],
-  log: [],
+  hasUnreadHighlights: false,
   hasUnreadMessages: false,
-  hasUnreadHighlight: false,
+  log: [],
+  topic: null,
+  users: [],
 };
 
-export const mockState: Readonly<State> = {
+export const mockClient: Readonly<Client> = {
+  send: noop,
+};
+
+export const mockClientState: Readonly<ClientState> = {
   channels: {},
-  channelListVisible: false,
-  userListVisible: false,
+};
+
+export const mockUIState: Readonly<UIState> = {
+  showChannelList: false,
+  showUserList: false,
+};
+
+export const mockRootState: Readonly<RootState> = {
+  client: mockClientState,
+  ui: mockUIState,
 };

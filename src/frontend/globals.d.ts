@@ -1,10 +1,7 @@
-interface Socket {
-  on: (event: string, callback: (data: any) => void) => void;
-  emit: (event: string, data: any) => void;
-  close: () => void;
-}
+import { Socket } from "socket.io";
 
-declare interface Window {
-  __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any;
-  io: (url?: string) => Socket;
+declare global {
+  interface Window {
+    io: (url?: string) => Socket;
+  }
 }
