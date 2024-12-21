@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Button, Table } from "reactstrap";
 
 import { ClientEventType, ListResult } from "../../../../../common";
 import { useClient } from "../../../../hooks";
-import { useSelector } from "react-redux";
 import { RootState } from "../../../../store";
 
 const PopularChannels: FunctionComponent = () => {
@@ -30,7 +30,7 @@ const PopularChannels: FunctionComponent = () => {
   return (
     <>
       <p className="mt-2">Or you can choose one of these:</p>
-      <Table>
+      <Table data-testid="PopularChannels">
         <thead>
           <tr>
             <th>Channel</th>

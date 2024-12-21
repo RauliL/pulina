@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import React, { FunctionComponent } from "react";
 
-type LogEntryTimestampProps = {
+export type LogEntryTimestampProps = {
   timestamp: number;
 };
 

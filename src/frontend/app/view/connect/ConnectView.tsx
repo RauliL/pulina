@@ -6,6 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useSelector } from "react-redux";
 import {
   Button,
   Col,
@@ -16,12 +17,15 @@ import {
   InputGroup,
   Label,
 } from "reactstrap";
+
 import {
   ClientEventType,
-  isValidNick,
+  MAXIMUM_NICK_LENGTH,
   VALID_NICK_PATTERN,
+  isValidNick,
 } from "../../../../common";
 import { useClient } from "../../../hooks";
+import { RootState } from "../../../store";
 
 export type ConnectViewProps = {
   className: string;
@@ -36,7 +40,9 @@ const ConnectView: FunctionComponent<ConnectViewProps> = ({ className }) => {
   const [isValid, setIsValid] = useState<boolean | undefined>(
     nick.length > 0 ? isValidNick(nick) : undefined,
   );
-  const [error] = useState<string | undefined>();
+  const error = useSelector<RootState, string | undefined>(
+    (state) => state.client.error,
+  );
 
   const handleNickUpdate = (event: FormEvent<HTMLInputElement>) => {
     setNick(event.currentTarget.value);
@@ -66,7 +72,7 @@ const ConnectView: FunctionComponent<ConnectViewProps> = ({ className }) => {
             <InputGroup>
               <Input
                 pattern={VALID_NICK_PATTERN.source}
-                maxLength={15}
+                maxLength={MAXIMUM_NICK_LENGTH}
                 defaultValue={nick ?? ""}
                 onChange={handleNickUpdate}
                 className={error || isValid === false ? "is-invalid" : ""}

@@ -6,7 +6,7 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{js,md,ts,tsx}]
+[*.{js,md,mjs,ts,tsx}]
 indent_style = space
 indent_size = 2
 max_line_length = 79

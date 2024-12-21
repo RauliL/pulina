@@ -1,3 +1,4 @@
+/// <reference types="@testing-library/jest-dom" />
 import { Socket } from "socket.io";
 
 declare global {

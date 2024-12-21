@@ -3,8 +3,8 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 
 import { App } from "./app";
-import { ClientContext } from "./context";
 import { initializeClient } from "./client";
+import { ClientContext } from "./context";
 import { setupStore } from "./store";
 
 const root = createRoot(document.getElementById("root")!);

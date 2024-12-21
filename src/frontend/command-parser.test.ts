@@ -1,6 +1,6 @@
-import { ClientEventType } from "../common";
 import { describe, expect, it } from "vitest";
 
+import { ClientEventType } from "../common";
 import { parseCommand } from "./command-parser";
 import { mockChannel } from "./mock";
 

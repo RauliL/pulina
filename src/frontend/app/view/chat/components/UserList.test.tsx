@@ -1,6 +1,7 @@
 import { cleanup, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
+import { Provider } from "react-redux";
 import { afterEach, describe, expect, it } from "vitest";
 
 import {
@@ -11,7 +12,6 @@ import {
 } from "../../../../mock";
 import { AppStore, setupStore } from "../../../../store";
 import UserList, { UserListProps } from "./UserList";
-import { Provider } from "react-redux";
 
 describe("<UserList/>", () => {
   const renderComponent = (

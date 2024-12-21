@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { v4 as uuid } from "uuid";
 
 import {
@@ -15,6 +15,8 @@ import { Channel, LogEntryType } from "../../client";
 export type ClientState = {
   /** Channels on which the user is currently on. */
   channels: Record<string, Channel>;
+  /** Latest error message received from the server. */
+  error?: string;
   /** List of channels returned by the LIST command. */
   listResults?: ListResult[];
   /** Nickname currently used by the user. */
@@ -60,7 +62,6 @@ export const clientSlice = createSlice({
         payload: { channel, message },
       }: PayloadAction<{ channel: string | null; message: string }>,
     ) => {
-      // TODO: Find out a way to display non-channel errors.
       if (channel) {
         state.channels[channel].log.push({
           id: uuid(),
@@ -68,6 +69,8 @@ export const clientSlice = createSlice({
           timestamp: Date.now(),
           type: LogEntryType.ERROR,
         });
+      } else {
+        state.error = message;
       }
     },
 

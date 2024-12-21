@@ -4,17 +4,17 @@ import React from "react";
 import { Provider } from "react-redux";
 import { afterEach, describe, expect, it } from "vitest";
 
+import { ClientEventType } from "../../../../../common";
 import { ClientContext } from "../../../../context";
 import {
-  mockClient,
   MockClient,
+  mockClient,
   mockClientState,
   mockListResult,
   mockRootState,
 } from "../../../../mock";
 import { AppStore, setupStore } from "../../../../store";
 import PopularChannels from "./PopularChannels";
-import { ClientEventType } from "../../../../../common";
 
 describe("<PopularChannels/>", () => {
   const renderComponent = (client: MockClient, store: AppStore) =>

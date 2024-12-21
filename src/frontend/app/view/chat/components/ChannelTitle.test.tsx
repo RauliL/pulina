@@ -1,10 +1,11 @@
 import { cleanup, render } from "@testing-library/react";
 import React from "react";
-import { afterEach, describe, expect, it } from "vitest";
-import ChannelTitle, { ChannelTitleProps } from "./ChannelTitle";
 import { Provider } from "react-redux";
-import { setupStore } from "../../../../store";
+import { afterEach, describe, expect, it } from "vitest";
+
 import { mockChannel } from "../../../../mock";
+import { setupStore } from "../../../../store";
+import ChannelTitle, { ChannelTitleProps } from "./ChannelTitle";
 
 describe("<ChannelTitle/>", () => {
   const renderComponent = (props: ChannelTitleProps) =>

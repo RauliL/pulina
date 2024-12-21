@@ -1,4 +1,15 @@
-import { ClientEvent, ClientEventType, ServerEventType } from "../common";
+import {
+  ClientEvent,
+  ClientEventType,
+  ServerChannelInfoEvent,
+  ServerErrorEvent,
+  ServerEvent,
+  ServerEventType,
+  ServerListEvent,
+  ServerMessageEvent,
+  ServerParticipancyEvent,
+  ServerTopicEvent,
+} from "../common";
 import { AppStore, clientSlice } from "./store";
 
 export enum LogEntryType {
@@ -56,38 +67,46 @@ export type Channel = {
 
 export type Client = {
   list: (query?: string) => void;
-  send: (event: ClientEvent) => void;
+  send: (event: ClientEvent, callback?: (event: ServerEvent) => void) => void;
 };
 
 export const initializeClient = (store: AppStore): Client => {
   const socket = window.io();
 
   socket.on(ServerEventType.CHANNEL_INFO, (event) => {
-    store.dispatch(clientSlice.actions.onChannelInfo(event));
+    store.dispatch(
+      clientSlice.actions.onChannelInfo(event as ServerChannelInfoEvent),
+    );
   });
 
   socket.on(ServerEventType.ERROR, (event) => {
-    store.dispatch(clientSlice.actions.onError(event));
+    store.dispatch(
+      clientSlice.actions.onError(event as unknown as ServerErrorEvent),
+    );
   });
 
   socket.on(ServerEventType.JOIN, (event) => {
-    store.dispatch(clientSlice.actions.onJoin(event));
+    store.dispatch(
+      clientSlice.actions.onJoin(event as ServerParticipancyEvent),
+    );
   });
 
   socket.on(ServerEventType.LIST, (event) => {
-    store.dispatch(clientSlice.actions.onList(event));
+    store.dispatch(clientSlice.actions.onList(event as ServerListEvent));
   });
 
   socket.on(ServerEventType.MESSAGE, (event) => {
-    store.dispatch(clientSlice.actions.onMessage(event));
+    store.dispatch(clientSlice.actions.onMessage(event as ServerMessageEvent));
   });
 
   socket.on(ServerEventType.PART, (event) => {
-    store.dispatch(clientSlice.actions.onPart(event));
+    store.dispatch(
+      clientSlice.actions.onPart(event as ServerParticipancyEvent),
+    );
   });
 
   socket.on(ServerEventType.TOPIC, (event) => {
-    store.dispatch(clientSlice.actions.onTopic(event));
+    store.dispatch(clientSlice.actions.onTopic(event as ServerTopicEvent));
   });
 
   socket.on(ServerEventType.WELCOME, ({ nick }) => {
@@ -102,8 +121,8 @@ export const initializeClient = (store: AppStore): Client => {
       });
     },
 
-    send(event) {
-      socket.emit(event.type, event);
+    send(event, callback) {
+      socket.emit(event.type, event, callback);
     },
   };
 };

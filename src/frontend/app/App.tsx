@@ -3,8 +3,8 @@ import React, { FunctionComponent } from "react";
 import { useSelector } from "react-redux";
 import { Col, Container, Row } from "reactstrap";
 
-import { RootState, UIState } from "../store";
 import { useCurrentChannel, useIsConnected } from "../hooks";
+import { RootState, UIState } from "../store";
 import { ChannelList } from "./components";
 import { ChatView, ConnectView, JoinChannelView } from "./view";
 

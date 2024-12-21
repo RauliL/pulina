@@ -3,13 +3,13 @@ import React, { FunctionComponent, ReactNode } from "react";
 import { Provider } from "react-redux";
 import { describe, expect, it } from "vitest";
 
+import { useCurrentChannel } from "./hooks";
 import {
   mockChannel,
   mockClientState,
   mockRootState,
   mockUIState,
 } from "./mock";
-import { useCurrentChannel } from "./hooks";
 import { AppStore, setupStore } from "./store";
 
 describe("useCurrentChannel()", () => {

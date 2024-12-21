@@ -8,8 +8,8 @@ import React, {
   useState,
 } from "react";
 import {
-  Col,
   Button,
+  Col,
   Container,
   Form,
   FormGroup,
@@ -20,11 +20,14 @@ import {
 
 import {
   ClientEventType,
-  isValidChannel,
+  MAXIMUM_CHANNEL_NAME_LENGTH,
   VALID_CHANNEL_NAME_PATTERN,
+  isValidChannel,
 } from "../../../../common";
 import { useClient } from "../../../hooks";
 import { PopularChannels } from "./components";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
 
 export type JoinChannelViewProps = {
   className: string;
@@ -40,6 +43,9 @@ const JoinChannelView: FunctionComponent<JoinChannelViewProps> = ({
   );
   const [isValid, setIsValid] = useState<boolean | undefined>(
     channel !== "#" ? isValidChannel(channel) : undefined,
+  );
+  const error = useSelector<RootState, string | undefined>(
+    (state) => state.client.error,
   );
 
   const handleGeneralClick = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -89,10 +95,11 @@ const JoinChannelView: FunctionComponent<JoinChannelViewProps> = ({
               <Input
                 value={channel}
                 pattern={VALID_CHANNEL_NAME_PATTERN.source}
-                maxLength={151}
+                maxLength={MAXIMUM_CHANNEL_NAME_LENGTH}
                 onChange={handleChannelUpdate}
                 innerRef={inputRef}
               />
+              {error && <div className="invalid-feedback">{error}</div>}
               {isValid === false && (
                 <div className="invalid-feedback">
                   Given channel name is invalid.

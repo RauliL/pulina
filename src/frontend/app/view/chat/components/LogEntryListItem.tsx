@@ -9,10 +9,6 @@ import {
 } from "../../../../client";
 import LogEntryTimestamp from "./LogEntryTimestamp";
 
-export type Props = {
-  entry: LogEntry;
-};
-
 const renderInfoEntry = (entry: InfoLogEntry) => (
   <>
     {entry.type === LogEntryType.INFO && (
@@ -62,8 +58,14 @@ const getEntryClassName = (entry: LogEntry): string | undefined => {
   }
 };
 
-const LogEntryListItem: FunctionComponent<Props> = ({ entry }) => (
-  <Row>
+export type LogEntryListItemProps = {
+  entry: LogEntry;
+};
+
+const LogEntryListItem: FunctionComponent<LogEntryListItemProps> = ({
+  entry,
+}) => (
+  <Row data-testid="LogEntryListItem">
     <Col lg="auto" className="pl-2 pr-2 text-secondary">
       <LogEntryTimestamp timestamp={entry.timestamp} />
     </Col>

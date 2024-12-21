@@ -1,16 +1,16 @@
 import classNames from "classnames";
 import React, { FunctionComponent } from "react";
+import { useSelector } from "react-redux";
 import { Col } from "reactstrap";
 
 import { useCurrentChannel } from "../../../hooks";
+import { RootState } from "../../../store";
 import {
   ChannelTitle,
   CommandInput,
   LogEntryList,
   UserList,
 } from "./components";
-import { RootState } from "../../../store";
-import { useSelector } from "react-redux";
 
 const style = {
   display: "grid",
