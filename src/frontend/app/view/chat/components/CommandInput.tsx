@@ -55,7 +55,7 @@ const CommandInput: FunctionComponent = () => {
         dispatch(
           clientSlice.actions.onError({
             channel: currentChannel.name,
-            text: error,
+            message: error,
           }),
         );
       });
