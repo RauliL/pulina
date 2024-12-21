@@ -58,7 +58,7 @@ export class Channel {
     });
 
     // If the user was the only user in the channel, delete the channel.
-    if (this.mapping.size === 0) {
+    if (channel.users.size === 0) {
       this.mapping.delete(name);
     }
   }
