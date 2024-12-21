@@ -8,6 +8,8 @@ export enum ServerEventType {
   ERROR = "error",
   /** User has joined a channel. */
   JOIN = "join",
+  /** Results of channel list query. */
+  LIST = "list",
   /** User has sent an message to a channel or user. */
   MESSAGE = "message",
   /** User has left a channel. */
@@ -28,6 +30,8 @@ type ServerChannelEvent = {
 export type ServerErrorEvent = {
   /** Type of the event. */
   type: ServerEventType.ERROR;
+  /** Channel to which the error is related to. */
+  channel: string | null;
   /** Error message. */
   message: string;
 };
@@ -50,6 +54,22 @@ export type ServerChannelInfoEvent = {
     /** Nickname of the user. */
     nick: string;
   }>;
+};
+
+export type ListResult = {
+  /** Name of the channel. */
+  channel: string;
+  /** Number of users on the channel. */
+  population: number;
+  /** Topic of the channel. */
+  topic: string | null;
+};
+
+export type ServerListEvent = {
+  /** Type of the event. */
+  type: ServerEventType.LIST;
+  /** List results. */
+  results: ListResult[];
 };
 
 export type ServerMessageEvent = {
@@ -87,6 +107,7 @@ export type ServerWelcomeEvent = {
 export type ServerEvent =
   | ServerChannelInfoEvent
   | ServerErrorEvent
+  | ServerListEvent
   | ServerMessageEvent
   | ServerParticipancyEvent
   | ServerTopicEvent

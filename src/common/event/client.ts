@@ -6,6 +6,8 @@ export enum ClientEventType {
   HELLO = "hello",
   /** User is attempting to join a channel. */
   JOIN = "join",
+  /** User wants to receive list of available channels. */
+  LIST = "list",
   /** User is attempting to send a message to a channel or user. */
   MESSAGE = "message",
   /** User wants to leave a channel. */
@@ -27,6 +29,16 @@ export type ClientHelloEvent = {
   type: ClientEventType.HELLO;
   /** The nickname user wishes to use. */
   nick: string;
+};
+
+/**
+ * Event that is sent when user requests list of available channels.
+ */
+export type ClientListEvent = {
+  /** Type of the event. */
+  type: ClientEventType.LIST;
+  /** Optional search query. */
+  query: string | null;
 };
 
 /**
@@ -61,6 +73,7 @@ export type ClientTopicEvent = ClientChannelEvent & {
 
 export type ClientEvent =
   | ClientHelloEvent
+  | ClientListEvent
   | ClientMessageEvent
   | ClientParticipancyEvent
   | ClientTopicEvent;

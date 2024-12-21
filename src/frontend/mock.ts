@@ -1,8 +1,6 @@
-import { noop } from "lodash";
-
 import { Channel, ChannelUser, Client } from "./client";
 import { ClientState, RootState, UIState } from "./store";
-import { ClientEvent } from "../common";
+import { ClientEvent, ClientEventType, ListResult } from "../common";
 
 export const mockChannelUser: Readonly<ChannelUser> = {
   isOperator: true,
@@ -18,6 +16,12 @@ export const mockChannel: Readonly<Channel> = {
   users: [mockChannelUser],
 };
 
+export const mockListResult: Readonly<ListResult> = {
+  channel: "#test-channel",
+  population: 1,
+  topic: null,
+};
+
 export type MockClient = Client & {
   events: ClientEvent[];
   reset: () => void;
@@ -28,6 +32,13 @@ export const mockClient = (): MockClient => {
 
   return {
     events,
+
+    list(query?: string) {
+      this.send({
+        type: ClientEventType.LIST,
+        query: query ?? null,
+      });
+    },
 
     reset() {
       events.length = 0;

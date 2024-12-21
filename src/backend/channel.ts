@@ -1,4 +1,10 @@
-import { ServerChannelInfoEvent, ServerEventType } from "../common";
+import { sortBy } from "lodash";
+
+import {
+  ListResult,
+  ServerChannelInfoEvent,
+  ServerEventType,
+} from "../common";
 import { Client } from "./client";
 
 export type ChannelUser = {
@@ -13,6 +19,31 @@ export class Channel {
   public topic: string | null;
   public readonly users: Map<string, ChannelUser>;
 
+  static list(client: Client, query: string | null) {
+    const results: ListResult[] = [];
+
+    // TODO: Add some sort of limit for these.
+    if (query && query.trim().length > 0) {
+      query = query.trim().toLowerCase();
+      for (const channel of this.mapping.values()) {
+        if (
+          channel.name.toLowerCase().includes(query) ||
+          (channel.topic && channel.topic.toLowerCase().includes(query))
+        ) {
+          results.push(channel.listResult);
+        }
+      }
+    } else {
+      for (const channel of this.mapping.values()) {
+        results.push(channel.listResult);
+      }
+    }
+    client.send({
+      type: ServerEventType.LIST,
+      results: sortBy(results, "population"),
+    });
+  }
+
   static join(client: Client, name: string) {
     const nick = client.getNick();
     let channel = this.mapping.get(name);
@@ -20,7 +51,7 @@ export class Channel {
 
     if (channel) {
       if (channel.users.has(nick)) {
-        client.sendError("You have already joined that channel.");
+        client.sendError(name, "You have already joined that channel.");
         return;
       }
 
@@ -73,7 +104,7 @@ export class Channel {
     }
 
     if (!channel.isOperator(nick)) {
-      client.sendError("You are not operator on this channel.");
+      client.sendError(name, "You are not operator on this channel.");
       return;
     }
 
@@ -106,6 +137,14 @@ export class Channel {
       type: ServerEventType.CHANNEL_INFO,
       topic: this.topic,
       users,
+    };
+  }
+
+  get listResult(): ListResult {
+    return {
+      channel: this.name,
+      population: this.users.size,
+      topic: this.topic,
     };
   }
 

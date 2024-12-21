@@ -20,7 +20,7 @@ export type Client = {
   leave: (room: string) => void;
   send: (event: ServerEvent) => void;
   sendChannelEvent: (channel: string, event: ServerEvent) => void;
-  sendError: (message: string) => void;
+  sendError: (channel: string | null, message: string) => void;
 };
 
 // Maps nicknames to socket connections.
@@ -28,7 +28,7 @@ const mapping = new Map<string, Client>();
 
 const requireNick = (client: Client): boolean => {
   if (!client.isRegistered()) {
-    client.sendError("You haven't registered a nickname yet.");
+    client.sendError(null, "You haven't registered a nickname yet.");
 
     return false;
   }
@@ -38,7 +38,7 @@ const requireNick = (client: Client): boolean => {
 
 const requireValidChannel = (client: Client, channel: string): boolean => {
   if (!isValidChannel(channel)) {
-    client.sendError("Not a valid name for a channel.");
+    client.sendError(null, "Not a valid name for a channel.");
 
     return false;
   }
@@ -48,7 +48,7 @@ const requireValidChannel = (client: Client, channel: string): boolean => {
 
 const requireValidNick = (client: Client, nick: string): boolean => {
   if (!isValidNick(nick)) {
-    client.sendError("Illegal nickname.");
+    client.sendError(null, "Illegal nickname.");
 
     return false;
   }
@@ -85,8 +85,8 @@ export const registerClient = (socket: Socket) => {
       socket.emit(event.type, event);
     },
 
-    sendError(message: string) {
-      this.send({ type: ServerEventType.ERROR, message });
+    sendError(channel: string | null, message: string) {
+      this.send({ type: ServerEventType.ERROR, channel, message });
     },
   };
 
@@ -116,12 +116,12 @@ export const registerClient = (socket: Socket) => {
     }
 
     if (client.isRegistered()) {
-      client.sendError("You already have a nickname.");
+      client.sendError(null, "You already have a nickname.");
       return;
     }
 
     if (mapping.has(nick)) {
-      client.sendError("That nickname has already been taken.");
+      client.sendError(null, "That nickname has already been taken.");
       return;
     }
 
@@ -133,6 +133,12 @@ export const registerClient = (socket: Socket) => {
   socket.on(ClientEventType.JOIN, ({ channel }) => {
     if (requireNick(client) && requireValidChannel(client, channel)) {
       Channel.join(client, channel);
+    }
+  });
+
+  socket.on(ClientEventType.LIST, ({ query }) => {
+    if (requireNick(client)) {
+      Channel.list(client, query);
     }
   });
 
@@ -188,9 +194,9 @@ const onMessage = (client: Client, target: string, message: string) => {
       targetClient.send(event);
       return;
     }
-    client.sendError("Unrecognized user.");
+    client.sendError(null, "Unrecognized user.");
     return;
   }
 
-  client.sendError("Not a valid name for a channel or a user.");
+  client.sendError(null, "Not a valid name for a channel or a user.");
 };

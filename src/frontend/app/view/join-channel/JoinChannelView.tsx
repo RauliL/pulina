@@ -24,6 +24,7 @@ import {
   VALID_CHANNEL_NAME_PATTERN,
 } from "../../../../common";
 import { useClient } from "../../../hooks";
+import { PopularChannels } from "./components";
 
 export type JoinChannelViewProps = {
   className: string;
@@ -37,7 +38,9 @@ const JoinChannelView: FunctionComponent<JoinChannelViewProps> = ({
   const [channel, setChannel] = useState<string>(
     window.localStorage.getItem("channel") || "#",
   );
-  const [isValid, setIsValid] = useState<boolean>(isValidChannel(channel));
+  const [isValid, setIsValid] = useState<boolean | undefined>(
+    channel !== "#" ? isValidChannel(channel) : undefined,
+  );
 
   const handleGeneralClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
@@ -84,13 +87,13 @@ const JoinChannelView: FunctionComponent<JoinChannelViewProps> = ({
             <Label for="channel">Name of the channel:</Label>
             <InputGroup>
               <Input
-                defaultValue={channel}
+                value={channel}
                 pattern={VALID_CHANNEL_NAME_PATTERN.source}
                 maxLength={151}
                 onChange={handleChannelUpdate}
                 innerRef={inputRef}
               />
-              {!isValid && (
+              {isValid === false && (
                 <div className="invalid-feedback">
                   Given channel name is invalid.
                 </div>
@@ -99,6 +102,7 @@ const JoinChannelView: FunctionComponent<JoinChannelViewProps> = ({
           </FormGroup>
           <Button type="submit">Join channel</Button>
         </Form>
+        <PopularChannels />
       </Container>
     </Col>
   );

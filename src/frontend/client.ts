@@ -1,4 +1,4 @@
-import { ClientEvent, ServerEventType } from "../common";
+import { ClientEvent, ClientEventType, ServerEventType } from "../common";
 import { AppStore, clientSlice } from "./store";
 
 export enum LogEntryType {
@@ -55,6 +55,7 @@ export type Channel = {
 };
 
 export type Client = {
+  list: (query?: string) => void;
   send: (event: ClientEvent) => void;
 };
 
@@ -65,8 +66,16 @@ export const initializeClient = (store: AppStore): Client => {
     store.dispatch(clientSlice.actions.onChannelInfo(event));
   });
 
+  socket.on(ServerEventType.ERROR, (event) => {
+    store.dispatch(clientSlice.actions.onError(event));
+  });
+
   socket.on(ServerEventType.JOIN, (event) => {
     store.dispatch(clientSlice.actions.onJoin(event));
+  });
+
+  socket.on(ServerEventType.LIST, (event) => {
+    store.dispatch(clientSlice.actions.onList(event));
   });
 
   socket.on(ServerEventType.MESSAGE, (event) => {
@@ -86,7 +95,14 @@ export const initializeClient = (store: AppStore): Client => {
   });
 
   return {
-    send(event: ClientEvent): void {
+    list(query) {
+      socket.emit(ClientEventType.LIST, {
+        type: ClientEventType.LIST,
+        query: query ?? null,
+      });
+    },
+
+    send(event) {
       socket.emit(event.type, event);
     },
   };

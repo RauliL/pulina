@@ -2,7 +2,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuid } from "uuid";
 
 import {
+  ListResult,
   ServerChannelInfoEvent,
+  ServerListEvent,
   ServerMessageEvent,
   ServerParticipancyEvent,
   ServerTopicEvent,
@@ -13,6 +15,8 @@ import { Channel, LogEntryType } from "../../client";
 export type ClientState = {
   /** Channels on which the user is currently on. */
   channels: Record<string, Channel>;
+  /** List of channels returned by the LIST command. */
+  listResults?: ListResult[];
   /** Nickname currently used by the user. */
   nick?: string;
 };
@@ -53,15 +57,25 @@ export const clientSlice = createSlice({
     onError: (
       state,
       {
-        payload: { channel, text },
-      }: PayloadAction<{ channel: string; text: string }>,
+        payload: { channel, message },
+      }: PayloadAction<{ channel: string | null; message: string }>,
     ) => {
-      state.channels[channel].log.push({
-        id: uuid(),
-        text,
-        timestamp: Date.now(),
-        type: LogEntryType.ERROR,
-      });
+      // TODO: Find out a way to display non-channel errors.
+      if (channel) {
+        state.channels[channel].log.push({
+          id: uuid(),
+          text: message,
+          timestamp: Date.now(),
+          type: LogEntryType.ERROR,
+        });
+      }
+    },
+
+    onList: (
+      state,
+      { payload: { results } }: PayloadAction<ServerListEvent>,
+    ) => {
+      state.listResults = results;
     },
 
     onJoin: (
