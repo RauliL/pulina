@@ -4,6 +4,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import { afterEach, describe, expect, it } from "vitest";
 
+import { ClientEventType } from "../../../../common";
 import { ClientContext } from "../../../context";
 import {
   MockClient,
@@ -12,9 +13,8 @@ import {
   mockListResult,
   mockRootState,
 } from "../../../mock";
-import JoinChannelView from "./JoinChannelView";
-import { ClientEventType } from "../../../../common";
 import { AppStore, setupStore } from "../../../store";
+import JoinChannelView from "./JoinChannelView";
 
 describe("<JoinChannelView/>", () => {
   const renderComponent = (

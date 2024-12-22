@@ -7,6 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useSelector } from "react-redux";
 import {
   Button,
   Col,
@@ -25,9 +26,8 @@ import {
   isValidChannel,
 } from "../../../../common";
 import { useClient } from "../../../hooks";
-import { PopularChannels } from "./components";
-import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
+import { PopularChannels } from "./components";
 
 export type JoinChannelViewProps = {
   className: string;
