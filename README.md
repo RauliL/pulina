@@ -1,11 +1,11 @@
 # Pulina
 
-[![travis][travis-image]][travis-url]
+[![github][github-image]][github-url]
 [![coveralls][coveralls-image]][coveralls-url]
 [![npm][npm-image]][npm-url]
 
-[travis-image]: https://travis-ci.com/RauliL/pulina.svg?branch=master
-[travis-url]: https://travis-ci.com/RauliL/pulina
+[github-image]: https://github.com/RauliL/pulina/actions/workflows/test.yml/badge.svg
+[github-url]: https://github.com/RauliL/pulina/actions/workflows/test.yml
 [coveralls-image]: https://coveralls.io/repos/github/RauliL/pulina/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/github/RauliL/pulina
 [npm-image]: https://img.shields.io/npm/v/pulina.svg
@@ -18,8 +18,8 @@ on the server side anywhere.
 
 ## Requirements
 
-* [Node.js] >= 8
-* [Yarn]
+- [Node.js] >= 8
+- [Yarn]
 
 ## Installation
 
@@ -64,16 +64,16 @@ channel will be used instead.
 Currently Pulina is very very minimal and does not provide many features which
 would make it more useful. Some things that I might add later would be:
 
-* Changing the nickname without having to reconnect.
-* Channel lists and searching for channels.
-* Password protected channels.
-* Private messages.
-* Channel operators who have privileges to ban other users from a channel.
-* Flood protection.
-* Improvements to the user interface in general, such as:
-  * Keyboard shortcuts.
-  * Rich text support.
-  * URL previews like in Slack.
+- Changing the nickname without having to reconnect.
+- Channel lists and searching for channels.
+- Password protected channels.
+- Private messages.
+- Channel operators who have privileges to ban other users from a channel.
+- Flood protection.
+- Improvements to the user interface in general, such as:
+  - Keyboard shortcuts.
+  - Rich text support.
+  - URL previews like in Slack.
 
 Icon made by [Freepik] from [www.flaticon.com](https://www.flaticon.com).
 
