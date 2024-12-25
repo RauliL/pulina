@@ -18,7 +18,7 @@ on the server side anywhere.
 
 ## Requirements
 
-- [Node.js] >= 8
+- [Node.js] >= 20
 - [Yarn]
 
 ## Installation
