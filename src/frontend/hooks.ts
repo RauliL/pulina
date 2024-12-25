@@ -1,3 +1,4 @@
+import { createSelector } from "@reduxjs/toolkit";
 import { sortBy, values } from "lodash";
 import { useContext } from "react";
 import { useSelector } from "react-redux";
@@ -16,10 +17,13 @@ export const useClient = (): Client => {
   return client;
 };
 
-export const useAllChannels = () =>
-  useSelector<RootState, Channel[]>((state) =>
-    sortBy(values(state.client.channels), "name"),
-  );
+const allChannelsSelector = createSelector(
+  (state: RootState) => state.client.channels,
+  (channels: Record<string, Channel>): Channel[] =>
+    sortBy(values(channels), "name"),
+);
+
+export const useAllChannels = () => useSelector(allChannelsSelector);
 
 export const useCurrentChannel = () =>
   useSelector<RootState, Channel | undefined>((state) => {
